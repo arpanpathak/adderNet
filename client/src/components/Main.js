@@ -18,6 +18,7 @@ class Main extends Component {
   constructor() {
     super();
     this.state = {
+
     };
   }
 
@@ -28,13 +29,12 @@ class Main extends Component {
   render() {
     return (
       <div>
-        <Navbar className="blue-grey">
+        <Navbar className="blue-grey navbar">
           <li><NavLink to="/home" >Home</NavLink></li>
           <li><NavLink to="/signup" >SignUp</NavLink></li>
           
           <li><NavLink to='/login'>LOGIN</NavLink></li>
         </Navbar>
-        <div className="container" >
         
           <div>
             <Route path="/home" component={Home} />
@@ -43,7 +43,6 @@ class Main extends Component {
           </div>
          
         </div>
-      </div>
 
     );
   }
