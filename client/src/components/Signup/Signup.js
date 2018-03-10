@@ -15,14 +15,13 @@ class Signup extends Component {
       phoneNo   : ''
 
     };
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
 
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     this.setState( { [e.target.id]: e.target.value } );
   }
   render() {
