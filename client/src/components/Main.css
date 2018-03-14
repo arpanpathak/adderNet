@@ -6,7 +6,18 @@
 footer{
 	position: absolute;
 	bottom: 0;
+	display: block;
 	width: 100%;
 	background: #E9EBEE;
+	box-sizing: border-box;
+	margin: 0 0 0 0;
+	min-height: 170px;
+	font-family: roboto;
+	color: grey;
 
+}
+
+.box {
+	box-shadow: 0 0 1px lightgray;
+	margin-top: 50px;
 }

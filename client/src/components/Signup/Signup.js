@@ -12,7 +12,9 @@ class Signup extends Component {
       email     : '',
       password  : '',
       aadharNo  : '',
-      phoneNo   : ''
+      phoneNo   : '',
+      confirmed: 'check green',
+      confirmed_password_matched: false
 
     };
   }
@@ -24,17 +26,27 @@ class Signup extends Component {
   handleChange = (e) => {
     this.setState( { [e.target.id]: e.target.value } );
   }
+  handleConfirm = (e) => {
+    this.setState({ confirmed_password_matched: e.target.value === this.state.password && e.target.value.trim()!='' });
+
+  }
+  handleSubmit = (e) => {
+    $.post('/register', this.state ,(res)=> { 
+
+    } );
+  }
   render() {
     return (
-       <div className='container row'>
-           <Input s={6} label="First Name"  id='firstName' onChange={ this.handleChange } ><Icon>insert_chart</Icon> </Input>  
-           <Input s={6} label="Last Name" id='lastName' onChange={ this.handleChange } /> 
-           <Input type="password" label="password" s={12} />
-           <Input type="password" label="Confirm Password" s={12} />
-           <Input type="email" label="Email Id" s={12} id='email' onChange={ this.handleChange }/>
-           <Input type="number" label="Phone No" id='phoneNo' s={12} onChange={ this.handleChange } />
-           <Input type="number" label="AADHAR No" s={12} />
-           <Button type="button" style={{'width': '100%'}} className="cyan darken-1">CREATE ACCOUNT</Button>
+       <div className='container row box'>
+           
+           <Input s={6} label="First Name"  id='firstName' onChange={ this.handleChange } icon='contacts'><Icon>insert_chart</Icon> </Input>  
+           <Input s={6} label="Last Name" id='lastName' onChange={ this.handleChange } icon='contacts'/> 
+           <Input type="password" label="password" s={12} icon='lock_open' onChange={ this.handleChange } id='password' />
+           <Input type="password" label="Confirm Password" s={12} icon={ this.state.confirmed } onChange={this.handleConfirm}  />
+           <Input type="email" label="Email Id" s={12} id='email' onChange={ this.handleChange } icon='email'/>
+           <Input type="number" label="Phone No" maxLength={10} id='phoneNo' s={12} onChange={ this.handleChange } icon='local_phone'  />
+           <Input type="number" label="AADHAR No" s={12} icon='fingerprint' />
+           <Button waves='light' style={{'width': '100%'}} disabled={!this.state.confirmed_password_matched} onClick={ this.handleSubmit }>CREATE ACCOUNT <Icon left>create</Icon> </Button>
        </div>
 
 
