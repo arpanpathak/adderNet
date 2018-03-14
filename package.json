@@ -16,12 +16,18 @@
     "nodemon": "^1.14.6"
   },
   "dependencies": {
-    "concurrently": "^3.5.1",
+    "concurrently": "*",
+    "body-parser": "*",
+    "bcryptjs": "",
     "cookie-parser": "^1.4.3",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "mongoose": "^5.0.9",
-    "passport": "^0.4.0",
-    "socket.io": "^2.0.4"
+    "express": "*",
+    "express-session": "*",
+    "connect-mongo": "*",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "passport-http": "*",
+    "multer": "*",
+    "socket.io": "*"
   }
 }
