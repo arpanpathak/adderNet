@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './Home.css';
-import { Card } from 'react-materialize';
-
+import { Card,Slider,Slide,Button } from 'react-materialize';
+import { Link } from 'react-router-dom';
 // A stateless react component class
 
 class Home extends Component {
@@ -15,16 +15,17 @@ class Home extends Component {
 	}
 
 	componentDidMount() {
-		return fetch('/creators')
-		      .then((response) => response.json())
-		      .then((responseJson) => {
+		// testing fetch api........
+		// return fetch('/creators')
+		//       .then((response) => response.json())
+		//       .then((responseJson) => {
 
-		        this.setState( { creators: responseJson } )
+		//         this.setState( { creators: responseJson } )
 
-		      })
-		      .catch((error) =>{
-		        console.error(error);
-		      });
+		//       })
+		//       .catch((error) =>{
+		//         console.error(error);
+		//       });
 	}
 
 	render() {
@@ -32,21 +33,30 @@ class Home extends Component {
 		return (
 			<div className="row" >
 
-				<div style= {{ 'padding': '10px 10px 10px 10px' }} >
-					<h4 className="cyan-text text-darken-4"> What is adderNet ?</h4>
-					<p className='flow-text'>
-					  adderNet is a social network that conenctes people by means of social network.
-
-					</p>
-
-
-					<h4 className="cyan-text text-darken-4"> What is adderNet ?</h4>
-				</div>
+				<Slider>
+				  <Slide
+				    src="https://i.pinimg.com/564x/92/a0/5b/92a05b527f59d49581573c329a54ab2e.jpg"
+				    title="addeNet">
+				    An Indian Social Network that connectes people in every aspect.
+				  </Slide>
+				  <Slide
+				    src=""
+				    title="Why are you waiting? Create an account"
+				    placement="right">
+				    <Link to="/signup"><button className='btn orange darken-2'>SIGN UP </button> </Link>
+				  </Slide>
+				  <Slide
+				    src="http://lorempixel.com/580/250/nature/3"
+				    title="say good bye! to facebook,instagram,twitter"
+							    placement="right">
+				    <span className="amber-text lighten-1"> No word limit like Twitter, now you can dislike posts, and many more features.... </span> 
+				  </Slide>
+				</Slider>
 
 				<footer>
 					{
 						this.state.creators.map( (person)=> (
-							<div> { person.firstName } &nbsp; { person.lastName } </div>
+							<div key={person.firstName}> { person.firstName } &nbsp; { person.lastName } </div>
 						  )
 						)
 					}

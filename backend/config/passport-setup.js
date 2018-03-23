@@ -1,6 +1,6 @@
 const passport = require('passport');
 const localStrategy = require('passport-local');
-var User = require('../models/user-model');
+var User = require('../models/User');
 
 passport.serializeUser((user,done)=>{
   done(null, user.id);
@@ -12,13 +12,13 @@ passport.deserializeUser((user,done)=>{
   });
 });
 
-passport.use(new localStrategy({
-  usernameField: 'username',
+passport.use('email-local',new localStrategy({
+  usernameField: 'email',
   passwordField: 'password'
-},(username, password, done)=>{
-  User.findOne({username:username}).then((currentUser)=>{
+},(email, password, done)=>{
+  User.findOne({ email : email}).then((currentUser)=>{
       if(currentUser){
-        if(currentUser.username == username && currentUser.password == password){
+        if(currentUser.email == email && currentUser.password == password){
           done(null, currentUser);
         }
         else{
@@ -30,3 +30,5 @@ passport.use(new localStrategy({
       }
   });
 }));
+
+module.exports = passport;

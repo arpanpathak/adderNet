@@ -17,13 +17,12 @@ import Profile from './Profile/Profile';
 const logo=<img src={require('./../assets/images/logo_light.png') } style={{ 'height': '60px'}} />;
 
 class Main extends Component {
-  constructor() {
+  constructor (){
     super();
     this.state = {
-
+      successUrl : "/profile"
     };
-
-  }
+}
 
   componentDidMount() {
 
@@ -31,30 +30,29 @@ class Main extends Component {
 
   render() {
     return (
-      <Switch >
-        <Route exact path="/profile" component={Profile} />
-       
-        <div className="home-screen-route">
-            <Navbar brand={ logo } fixed left className="blue-grey navbar">
-              
-              <li><NavLink exact to="/" >Home</NavLink></li>
-              <li><NavLink exact to="/signup" >SignUp</NavLink></li>
-              
-              <li><NavLink exact to='/login'>LOGIN</NavLink></li>
+      <div>
+        <Route path="/profile" component={Profile} />
 
+        <Route path="/home" render={ ()=>(
+            <div>
+            <Navbar brand={ logo } fixed left className="cyan darken-4 z-depth-2 navbar">
+              <li><NavLink exact to="/home" >Home</NavLink></li>
+              <li><NavLink exact to="/home/signup" >SignUp</NavLink></li>
+              <li><NavLink exact to='/home/login'>LOGIN</NavLink></li>
             </Navbar>
             
-             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/signup" component={Signup} />
-             </Switch>
-            
-        </div> 
+            <Switch>
+              <Route exact path="/home" component={Home} />
+              <Route exact path="/home/login/:next?" component={Login} />
+              <Route exact path="/home/signup" component={Signup} />
+              <Route><div> 404 page not found </div></Route>
+            </Switch>   
+            </div>
+           ) } />
         
-          
-         
-       </Switch>
+                       
+      </div>
+
 
     );
   }

@@ -4,7 +4,7 @@ module.exports = {
     db: 'mongodb://localhost:27017/chatbox'
   },
   session:{
-    name: 'BoomKookie',
-    cookieKey: ['canbeanystringoftext']
+    name: 'adderKookie',
+    cookieKey: ['cookies taste great']
   }
 };
