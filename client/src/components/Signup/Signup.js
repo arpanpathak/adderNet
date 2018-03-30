@@ -37,7 +37,7 @@ class Signup extends Component {
   }
   render() {
     return (
-       <div className='container row box'>
+       <div className='container row box blue-strip' >
            
            <Input s={6} label="First Name"  id='firstName' onChange={ this.handleChange } icon='contacts'><Icon>insert_chart</Icon> </Input>  
            <Input s={6} label="Last Name" id='lastName' onChange={ this.handleChange } icon='contacts'/> 

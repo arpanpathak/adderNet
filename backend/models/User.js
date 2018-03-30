@@ -1,22 +1,22 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-
+  date_created: { type: Date  },
   userid: mongoose.Schema.Types.ObjectId,
   username: String,
-  email: String,
+  email: { type:String, unique: true},
   password: String,
   name: String,
-  googleId: String,
-  fbId: String,
+  googleId: { type:String, unique: true},
+  fbId: { type:String, unique: true},
   friends: Array,
-  profilePic: String,
-  coverPic: String,
+  profilePic: String, // static url of profile pic
+  coverPic: String,  // static url of cover pic
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   friend_requests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
   shares: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
-  messages: [ { from: String, time: { type: Date, default: Date.now }, }]
+  messages: [ { from: String, time: { type: Date, default: Date.now } }]
 });
 
 var User = mongoose.model('user',userSchema);

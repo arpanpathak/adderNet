@@ -1,11 +1,14 @@
 /*** import your models here ***/
 const User=require('./models/User.js');
+/* internal API */
+let random=(min, max)=> Math.random() * (max - min) + min ;
+/* end of this section */
 
-module.exports = (app) => {
+// all server API .. 
+module.exports = (app,passport) => {
 
 	// an API to get all the details about the developers/creators ... 
 	app.get('/creators', (req, res) => {
-		console.log(app);
 	  const creators = [
 	    {id: 1, firstName: 'Arpan', lastName: 'Pathak'},
 	    {id: 2, firstName: 'Tirthamouli', lastName: 'Baidya'},
@@ -45,8 +48,19 @@ module.exports = (app) => {
 
 	// this api is used for unitTesting, use tests.js file to add unit tests..
 	app.get('/test',(req,res) => {
-		var results=[];
-		User.find({},(err,users)=>{ results.push(users) });
-		res.json( {users: results }) ;
+		var results=null;
+		User.find({},(err,users)=>{ console.log(users); res.json({'users':users}) });
 	});
+
+	app.get('/registerUser',(req,res) => { 
+		new User({'email':'abc@gmail.com'})
+		res.json(usr);
+	});
+	app.post('/auth',passport.authenticate('email-local', {successRedirect: '/auth', failureRedirect: '/authFailed' }),
+		(req,res)=>{ 
+			
+		}
+	);
+	app.get('/authFailed',(req,res)=>res.json({'error': 'authentication failed!'}));
+
 }

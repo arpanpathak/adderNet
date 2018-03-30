@@ -6,8 +6,11 @@ const cookieParser = require('cookie-parser'),
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 const keys = require('./config/keys.js');
-const passport = require('./config/passport-setup.js');
+
+
 module.exports = (app) => {
+	
+	const passport = require('./config/passport-setup.js');
 	
 	app.use( bodyParser.urlencoded({ extended: true} ) );
 	app.use(cookieParser());

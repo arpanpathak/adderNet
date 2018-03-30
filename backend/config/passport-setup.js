@@ -31,4 +31,23 @@ passport.use('email-local',new localStrategy({
   });
 }));
 
+passport.use('phone-local',new localStrategy({
+  usernameField: 'phone',
+  passwordField: 'password'
+},(email, password, done)=>{
+  User.findOne({ phone : phone}).then((currentUser)=>{
+      if(currentUser){
+        if(currentUser.phone == phone && currentUser.password == password){
+          done(null, currentUser);
+        }
+        else{
+          done(null, false);
+        }
+      }
+      else{
+        done(null, false);
+      }
+  });
+}));
+
 module.exports = passport;

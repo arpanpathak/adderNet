@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Main.css';
 import $ from 'jquery';
 import {Navbar,NavItem,Icon,Button} from 'react-materialize';
-import { Route, NavLink, HashRouter,Switch } from "react-router-dom";
+import { Route, NavLink, HashRouter,Switch,Redirect } from "react-router-dom";
 
 
 /* importing components */
@@ -32,16 +32,16 @@ class Main extends Component {
     return (
       <div>
         <Route path="/profile" component={Profile} />
-
+        <Route exact path="/" render={ ()=><Redirect to="/home" /> } />
         <Route path="/home" render={ ()=>(
             <div>
-            <Navbar brand={ logo } fixed left className="cyan darken-4 z-depth-2 navbar">
+            <Navbar brand={ logo } left className="cyan darken-1 z-depth-2 navbar">
               <li><NavLink exact to="/home" >Home</NavLink></li>
               <li><NavLink exact to="/home/signup" >SignUp</NavLink></li>
               <li><NavLink exact to='/home/login'>LOGIN</NavLink></li>
             </Navbar>
             
-            <Switch>
+            <Switch style={{ overflowY: 'scroll'}}>
               <Route exact path="/home" component={Home} />
               <Route exact path="/home/login/:next?" component={Login} />
               <Route exact path="/home/signup" component={Signup} />

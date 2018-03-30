@@ -17,8 +17,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
-       <div className='container row box' style={{ 'paddingTop': '20px'}}>
+       <div className='container row box grey-strip' style={{ 'paddingTop': '20px'}}>
 
            
            <div className='col l12 s12'>
@@ -27,8 +26,6 @@ class Login extends Component {
              <Input type='checkbox' s={12} label="keep me logged in" style={{ 'marginLeft': '20px !important'}}/> 
              <Button waves='light' className='right'>LOGIN <Icon left>save</Icon> </Button>
            </div>
-          
-       </div>
 
       </div>
 

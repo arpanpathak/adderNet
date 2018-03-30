@@ -3,7 +3,7 @@
 const express = require('express');
 const app = express(),
       imports=require('./imports')(app);
-      api=require('./api')(app);
+      api=require('./api')(app,require('./config/passport-setup.js'));
 /* start the server */
 
 const port = 5000;

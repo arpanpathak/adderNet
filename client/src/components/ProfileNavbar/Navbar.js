@@ -11,7 +11,9 @@ class Nav extends Component {
     super(props);
     this.state = {
       authenticated: false,
-      dp: "https://www.nexia-sabt.co.za/wp-content/uploads/2016/05/dummy.jpg"
+      dp: "https://www.nexia-sabt.co.za/wp-content/uploads/2016/05/dummy.jpg", // user dp url.. fetch from server..
+      user: "",
+
     };
   }
 
@@ -20,15 +22,12 @@ class Nav extends Component {
   }
 
   render() {
-    { /*
-    if(!this.state.authenticated)
-      return <div>You are not authorized to view this page <Link to={`/login/${window.location.href.split('/').pop()}` } > Click Here</Link> </div> ;
-    */ }
     return ( 
        <Navbar style={{ backgroundColor: '#123243' }} right className="navbar" brand={ <Icon>people</Icon>}>
 
-       <NavItem href="#" className="black" style={{  borderRadius: '15px' }}>
-        <Input type="text" className="search" placeholder="Type here to search" s={6} icon="search"/>
+       <NavItem href="#" style={{  borderRadius: '15px',color: '#fff' }}>
+        <Input type="text" className="search" label="Type here to search" s={6} icon="search" 
+         style={{ backgroundColor: '#123243',color: '#fff'}} />
        </NavItem>
         <NavItem href="#">
           <i className="fas fa-comments nav-icon"></i> Messenger<span className='blue-grey new badge'>4</span>
@@ -61,10 +60,13 @@ class Nav extends Component {
         
         <NavItem href="#">
 
-            <span><i className="fas fa-handshake nav-icon"></i> Friend Requests </span>
+            <i className="fas fa-handshake nav-icon"></i> Friend Requests 
 
-            <span className="btn-floating btn-large waves-effect waves-light red lighten-1"><Icon>build</Icon></span>
+            
         </NavItem>
+         <NavItem href="#">
+          <span className="btn-floating btn-large waves-effect waves-light red lighten-1"><Icon>build</Icon></span>
+         </NavItem>
         
         <SideNav
           trigger={<a href="#" className="btn-floating btn-large waves-effect waves-light blue-grey"><Icon>face</Icon></a>}
