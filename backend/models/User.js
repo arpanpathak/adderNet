@@ -14,9 +14,13 @@ const userSchema = new mongoose.Schema({
   coverPic: String,  // static url of cover pic
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   friend_requests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
+  friend_requests_send: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
+  blocked_users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
+  blocked_by: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
   shares: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
   messages: [ { from: String, time: { type: Date, default: Date.now } }]
+
 });
 
 var User = mongoose.model('user',userSchema);
