@@ -1,5 +1,6 @@
-const passport = require('passport');
-const localStrategy = require('passport-local');
+const passport = require('passport'),
+      localStrategy = require('passport-local'),
+      GoogleStrategy = require('passport-google-oauth20').Strategy;
 var User = require('../models/User');
 
 passport.serializeUser((user,done)=>{
@@ -12,6 +13,10 @@ passport.deserializeUser((user,done)=>{
   });
 });
 
+ //Authentication Strategies....
+/** different kinds of authentication that adderNet using are here **/
+
+// authentication using email and password...
 passport.use('email-local',new localStrategy({
   usernameField: 'email',
   passwordField: 'password'
@@ -31,6 +36,7 @@ passport.use('email-local',new localStrategy({
   });
 }));
 
+// authentication using phone and password...
 passport.use('phone-local',new localStrategy({
   usernameField: 'phone',
   passwordField: 'password'
@@ -49,5 +55,10 @@ passport.use('phone-local',new localStrategy({
       }
   });
 }));
+
+// authentication using google account..
+// passport.use(new GoogleStrategy());
+
+
 
 module.exports = passport;
