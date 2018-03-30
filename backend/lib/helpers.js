@@ -5,6 +5,8 @@
 
 //Dependencies
 const crypto = require('crypto');
+const https = require('https');
+const querystring = require('querystring');
 const config = require('../config/keys');
 
 //Container for all helpers
