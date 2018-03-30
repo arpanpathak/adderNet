@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
   name: String,
   googleId: { type:String, unique: true},
   fbId: { type:String, unique: true},
-  friends: Array,
   profilePic: String, // static url of profile pic
   coverPic: String,  // static url of cover pic
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
