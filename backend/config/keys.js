@@ -6,5 +6,10 @@ module.exports = {
   session:{
     name: 'adderKookie',
     cookieKey: ['cookies taste great']
-  }
+  },
+  salt:{
+    key: '9)&'
+  },
+  hashSecret1: 'thisIsASecret',
+  hashSecret2: 'thisIsAlsoASecret',
 };
