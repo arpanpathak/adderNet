@@ -12,6 +12,7 @@ module.exports = {
   },
   hashSecret1: 'thisIsASecret',
   hashSecret2: 'thisIsAlsoASecret',
+
   api: {
   	googleMap: {
   		"key": "AIzaSyDv084m8ZnoPEnwZSEApjfVwM0eCY6OZ6M",
@@ -24,5 +25,10 @@ module.exports = {
   		"auth_provider_x509_cert_url":  "https://www.googleapis.com/oauth2/v1/certs",
   		"client_secret": 				"ETf36FQMkQNiXMf2j_goZqio"
   	} 	
+
+  twilio: {
+    accountSid: 'yourSID',
+    authToken: 'yourToken',
+    fromPhone: 'yourPhone'
   }
 };

@@ -78,7 +78,7 @@ module.exports = (app,passport) => {
 
 		}
 	);
-	
+
 	app.get('/authFailed',(req,res)=>res.json({'error': 'authentication failed!'}));
 
 }
