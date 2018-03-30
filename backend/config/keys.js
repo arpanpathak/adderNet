@@ -12,4 +12,9 @@ module.exports = {
   },
   hashSecret1: 'thisIsASecret',
   hashSecret2: 'thisIsAlsoASecret',
+  twilio: {
+    accountSid: 'yourSID',
+    authToken: 'yourToken',
+    fromPhone: 'yourPhone'
+  }
 };

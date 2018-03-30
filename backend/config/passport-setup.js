@@ -1,5 +1,6 @@
 const passport = require('passport');
 const localStrategy = require('passport-local');
+const helpers = require('../lib/helpers');
 var User = require('../models/User');
 
 passport.serializeUser((user,done)=>{
@@ -18,7 +19,7 @@ passport.use('email-local',new localStrategy({
 },(email, password, done)=>{
   User.findOne({ email : email}).then((currentUser)=>{
       if(currentUser){
-        if(currentUser.email == email && currentUser.password == password){
+        if(currentUser.email == email && currentUser.password == helpers.hash(password)){
           done(null, currentUser);
         }
         else{
