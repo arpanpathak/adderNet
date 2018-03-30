@@ -54,7 +54,7 @@ module.exports = (app,passport) => {
 		User.find({},(err,users)=>{ console.log(users); res.json({'users':users}) });
 	});
 
-	app.get('/registerUser',(req,res) => {
+	app.post('/registerUser',(req,res) => {
 		//Sanity check
 		var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
 		var password = typeof(req.body.password) == 'string' && req.body.password.length > 7 ? req.body.password : false;
@@ -62,14 +62,11 @@ module.exports = (app,passport) => {
 			//hashing password
 			var hash = helpers.hash(password);
 			//Store user
-			new User({'email':email,
-								'password':hash}).save((newUser)=>{
-									if(!newUser){
-										res.json({"Success" : "Created user"});
-									}else{
-										res.json({"Errpr" : "Unable to create user"});
-									}
-								});
+			new User({'email':email,'password':hash}).save((newUser)=>{
+						!newUser? res.json({"success" : "Created user"}) :
+								  res.json({"error" : "Unable to create user"});
+						}
+					);
 		}else{
 			res.json({"Error" : "Invalid email and password type"});
 		}

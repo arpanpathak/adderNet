@@ -4,12 +4,12 @@ const userSchema = new mongoose.Schema({
   date_created: { type: Date  },
   userid: mongoose.Schema.Types.ObjectId,
   username: String,
-  email: { type:String, unique: true},
+  email: { type:String, unique: false},
   phone: String,
   password: String,
   name: String,
-  googleId: { type:String, unique: true},
-  fbId: { type:String, unique: true},
+  googleId: { type:String, unique: false},
+  fbId: { type:String, unique: false},
   profilePic: String, // static url of profile pic
   coverPic: String,  // static url of cover pic
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],

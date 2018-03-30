@@ -26,6 +26,7 @@
     "mongoose": "*",
     "multer": "*",
     "passport": "*",
+    "passport-google-oauth20": "^1.0.0",
     "passport-http": "*",
     "passport-local": "*",
     "socket.io": "*"
