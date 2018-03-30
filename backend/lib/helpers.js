@@ -4,11 +4,16 @@
  */
 
 //Dependencies
+const https= require('https');
+const querystring = require('querystring');
 const crypto = require('crypto');
 const config = require('../config/keys');
 
 //Container for all helpers
 var helpers = {};
+
+// Random number in range
+helpers.random = (min, max)=> Math.random() * (max - min) + min;
 
 //create SHA256 hash
 helpers.hash = function(password){

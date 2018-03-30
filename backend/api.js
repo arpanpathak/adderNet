@@ -3,7 +3,7 @@ const User=require('./models/User.js');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
 /* internal API */
-let random=(min, max)=> Math.random() * (max - min) + min ;
+ // this piece of code is moved to /lib/helpers.js file
 /* end of this section */
 
 // all server API ..
@@ -48,12 +48,6 @@ module.exports = (app,passport) => {
 		res.json({ status: 'logged out'});
 	});
 
-	// this api is used for unitTesting, use tests.js file to add unit tests..
-	app.get('/test',(req,res) => {
-		var results=null;
-		User.find({},(err,users)=>{ console.log(users); res.json({'users':users}) });
-	});
-
 	app.post('/registerUser',(req,res) => {
 		//Sanity check
 		var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
@@ -78,7 +72,13 @@ module.exports = (app,passport) => {
 
 		}
 	);
-
+	
 	app.get('/authFailed',(req,res)=>res.json({'error': 'authentication failed!'}));
+	app.get('/delete_all',(req,res)=> User.remove({ },(err)=> res.send(err? err:  'cleared all users..') ) );
+
+	app.get('/sendOTP',(req,res)=> helpers.sendTwilioSms("917686009276",helpers.RandomStringGenerate(6),
+									(err)=> res.send(err?err:'sent') ) 
+			);
+
 
 }

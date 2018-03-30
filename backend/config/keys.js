@@ -24,7 +24,8 @@ module.exports = {
   		"token_uri": 					"https://accounts.google.com/o/oauth2/token",
   		"auth_provider_x509_cert_url":  "https://www.googleapis.com/oauth2/v1/certs",
   		"client_secret": 				"ETf36FQMkQNiXMf2j_goZqio"
-  	} 	
+  	}
+  }, 	
 
   twilio: {
     accountSid: 'yourSID',
