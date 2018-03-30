@@ -28,8 +28,8 @@ module.exports = {
   }, 	
 
   twilio: {
-    accountSid: 'yourSID',
-    authToken: 'yourToken',
-    fromPhone: 'yourPhone'
+    accountSid: 'AC8f70e7f43aa90878c38f5b1c3f3c1100',
+    authToken: '03196ebe1d0bc7b5a0c3b5c096496f23',
+    fromPhone: '+19386666765'
   }
 };

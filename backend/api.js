@@ -76,7 +76,7 @@ module.exports = (app,passport) => {
 	app.get('/authFailed',(req,res)=>res.json({'error': 'authentication failed!'}));
 	app.get('/delete_all',(req,res)=> User.remove({ },(err)=> res.send(err? err:  'cleared all users..') ) );
 
-	app.get('/sendOTP',(req,res)=> helpers.sendTwilioSms("917686009276",helpers.RandomStringGenerate(6),
+	app.get('/sendOTP',(req,res)=> helpers.sendTwilioSms("+919099994016","apni vogoban dada, ei nin OTP="+helpers.RandomStringGenerate(6),
 									(err)=> res.send(err?err:'sent') ) 
 			);
 
