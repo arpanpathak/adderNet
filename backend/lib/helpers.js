@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  * Helper for various tasks
  *
