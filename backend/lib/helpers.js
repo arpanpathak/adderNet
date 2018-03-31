@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Helper for various tasks
  *
@@ -110,3 +111,4 @@ helpers.RandomStringGenerate = function(strLength){
 
 //exports
 module.exports = helpers;
+
