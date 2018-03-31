@@ -1,6 +1,7 @@
 const passport = require('passport'),
       localStrategy = require('passport-local'),
       GoogleStrategy = require('passport-google-oauth20').Strategy,
+      FacebookStrategy = require('passport-facebook').Strategy,
       keys = require('./keys');
 const helpers = require('../lib/helpers');
 var User = require('../models/User');
@@ -68,11 +69,24 @@ passport.use(new GoogleStrategy(
                       console.log('Google OAuth accessToken ',accessToken);
                       console.log('Google OAuth refreshToken',refreshToken );  
                       console.log('User info got:- ',profile);  
-                      done(null,profile);
+                      return done(null,profile);
                   }
                 ) 
              );
 
 
+// authentication using facebook account.. it won't work without https..
+passport.use(new FacebookStrategy({
+    clientID: keys.api.fbOAuth.client_id,
+    clientSecret: keys.api.fbOAuth.client_secret,
+    callbackURL: "/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, user, done) {
+    // User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+    //   return cb(err, user);
+    // });
+    done(null,user)
+  }
+));
 
 module.exports = passport;

@@ -16,11 +16,11 @@ module.exports = (app,passport) => {
 	    {id: 1, firstName: 'Arpan', lastName: 'Pathak'},
 	    {id: 2, firstName: 'Tirthamouli', lastName: 'Baidya'},
 	    {id: 3, firstName: 'Subhamoy', lastName: 'Sarkar'},
+
 	  ];
 
 	  res.json(creators);
 	});
-
 
 	// an API to see whether the user is authenticated and authorized to view certain api or not...
 	app.post('/authenticated',(req,res) => {
@@ -28,25 +28,11 @@ module.exports = (app,passport) => {
 		res.json({authenticated: true});
 	});
 
-	// this is the login api, here use passportJS callbacks to authenticate using
-	// any strategy you want.. to add OAuth strategy , edit the required setup file...
-
-	app.post('/login',(req,res) => {
-
-	});
-
 	// user registration api... before using any model, use require('..') to import them
 	// from /models directory of this project..
 	app.post('/register',(req,res) => {
 	  console.log(req.body);
 	  res.string(`hello${req.body.firstName}`);
-	});
-
-
-	// logout api
-	app.get('/logout',(req,res) => {
-		req.session.destroy();
-		res.json({ status: 'logged out'});
 	});
 
 	app.post('/registerUser',(req,res) => {
@@ -84,6 +70,20 @@ module.exports = (app,passport) => {
 									(err)=> res.send(err?err:'sent') ) 
 			);
 
+	/*** authentication API ***/
+	// this is the login api, here use passportJS callbacks to authenticate using
+	// any strategy you want.. to add OAuth strategy , edit the required setup file...
+
+	app.post('/login',(req,res) => {
+
+	});
+	// logout api
+	app.get('/logout',(req,res) => {
+		req.logout();
+		req.user=null;
+		res.json({ message: 'logged out','status': 'logged out'});
+	});
+
 	// google oauth API
 	app.get('/auth/google', passport.authenticate('google', {
 	    scope: ['profile','email']
@@ -93,6 +93,14 @@ module.exports = (app,passport) => {
 	app.get('/auth/google/callback',
 	    	passport.authenticate('google'),
 	    	(req,res)=> { res.send(helpers.json_to_html(req.user)) }
+	);
+
+
+	app.get('/auth/facebook',passport.authenticate('facebook'));
+	// facebook OAuth callback URI... 
+	app.get('/auth/facebook/callback',
+	  passport.authenticate('facebook', { failureRedirect: '/authFailed' }),
+	  (req,res)=> { res.send(helpers.json_to_html(req.user)) } 
 	);
 
 

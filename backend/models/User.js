@@ -7,11 +7,16 @@ const userSchema = new mongoose.Schema({
   email: { type:String, unique: false},
   phone: String,
   password: String,
+
+  // personal information....
   name: String,
+  gender: String,
   googleId: { type:String, unique: false},
   fbId: { type:String, unique: false},
   profilePic: String, // static url of profile pic
   coverPic: String,  // static url of cover pic
+
+  // social information ....
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   friend_requests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   friend_requests_send: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
