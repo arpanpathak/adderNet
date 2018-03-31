@@ -1,6 +1,7 @@
 const passport = require('passport'),
       localStrategy = require('passport-local'),
-      GoogleStrategy = require('passport-google-oauth20').Strategy;
+      GoogleStrategy = require('passport-google-oauth20').Strategy,
+      keys = require('./keys');
 const helpers = require('../lib/helpers');
 var User = require('../models/User');
 
@@ -58,7 +59,19 @@ passport.use('phone-local',new localStrategy({
 }));
 
 // authentication using google account..
-// passport.use(new GoogleStrategy());
+passport.use(new GoogleStrategy(
+                 { clientID: keys.api.googleOAuth.client_id,
+                  clientSecret: keys.api.googleOAuth.client_secret,
+                  callbackURL: '/auth/google/callback'
+
+                 },(accessToken, refreshToken, profile, done) => { 
+                      console.log('Google OAuth accessToken ',accessToken);
+                      console.log('Google OAuth refreshToken',refreshToken );  
+                      console.log('User info got:- ',profile);  
+                      done(null,profile);
+                  }
+                ) 
+             );
 
 
 

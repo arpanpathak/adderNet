@@ -2,6 +2,7 @@
 const User=require('./models/User.js');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
+
 /* internal API */
  // this piece of code is moved to /lib/helpers.js file
 /* end of this section */
@@ -74,11 +75,25 @@ module.exports = (app,passport) => {
 	);
 	
 	app.get('/authFailed',(req,res)=>res.json({'error': 'authentication failed!'}));
+
+	// delete all user
 	app.get('/delete_all',(req,res)=> User.remove({ },(err)=> res.send(err? err:  'cleared all users..') ) );
 
+	// API to send OTP
 	app.get('/sendOTP',(req,res)=> helpers.sendTwilioSms("+919099994016","apni vogoban dada, ei nin OTP="+helpers.RandomStringGenerate(6),
 									(err)=> res.send(err?err:'sent') ) 
 			);
+
+	// google oauth API
+	app.get('/auth/google', passport.authenticate('google', {
+	    scope: ['profile','email']
+	}));
+
+	// google OAuth callback URI
+	app.get('/auth/google/callback',
+	    	passport.authenticate('google'),
+	    	(req,res)=> { res.send(helpers.json_to_html(req.user)) }
+	);
 
 
 }

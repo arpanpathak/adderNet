@@ -8,6 +8,7 @@ const https= require('https');
 const querystring = require('querystring');
 const crypto = require('crypto');
 const config = require('../config/keys');
+var prettyHtml = require('json-pretty-html').default; 
 
 //Container for all helpers
 var helpers = {};
@@ -16,7 +17,7 @@ var helpers = {};
 helpers.random = (min, max)=> Math.random() * (max - min) + min;
 
 //create SHA256 hash
-helpers.hash = function(password){
+helpers.hash = (password)=>{
   if(typeof(password) == 'string' && password.length > 7){
     var initialHash = crypto.createHmac('sha256', config.hashSecret1).update(password).digest('hex');
     initialHash += config.salt.key;
@@ -29,7 +30,7 @@ helpers.hash = function(password){
 };
 
 //Send an SMS message via Twilio
-helpers.sendTwilioSms = function(phone, msg, callback){
+helpers.sendTwilioSms = (phone, msg, callback)=>{
   //Validate parameters
   phone = typeof(phone) == 'string' && phone.trim().length == 13 ? phone.trim() : false;
   msg = typeof(msg) == 'string' && msg.trim().length > 0 && msg.trim().length < 1600 ? msg :false;
@@ -85,7 +86,7 @@ helpers.sendTwilioSms = function(phone, msg, callback){
 };
 
 //Create a random string
-helpers.RandomStringGenerate = function(strLength){
+helpers.RandomStringGenerate = (strLength)=>{
   strLength = typeof(strLength) == 'number' && strLength > 0 ? strLength : false;
   if(strLength){
 
@@ -107,6 +108,11 @@ helpers.RandomStringGenerate = function(strLength){
     return false;
   }
 };
+
+// inline styling for JSON.. 
+const style="<style> body{font-family:Menlo,Monaco,Courier New,monospace;font-weight:400;font-size:14px;line-height:16px;letter-spacing:0;background-color:#24282A;color:#d4d4d4;text-align:left;border-top:1px solid #121516;padding-top:10px;padding-bottom:10px;margin:0}.json-pretty{padding-left:30px;padding-right:30px}.json-selected{background-color:rgba(139,191,228,.19999999999999996)}.json-string{color:#6caedd}.json-key{color:#ec5f67}.json-boolean,.json-number{color:#99c794}</style>";
+  // beautify json response..
+helpers.json_to_html=(json) => "<!DOCTYLE html><html><body>"+style+prettyHtml(json)+"</body></html>"; 
 
 //exports
 module.exports = helpers;
