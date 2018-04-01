@@ -20,7 +20,9 @@ class Main extends Component {
   constructor (){
     super();
     this.state = {
-      successUrl : "/profile"
+
+      successUrl : "/profile",
+      authencicated: false
     };
 }
 
@@ -35,7 +37,7 @@ class Main extends Component {
         <Route exact path="/" render={ ()=><Redirect to="/home" /> } />
         <Route path="/home" render={ ()=>(
             <div>
-            <Navbar brand={ logo } left className="cyan darken-1 z-depth-2 navbar">
+            <Navbar brand={ <i className="fab fa-asymmetrik"></i>} left className="cyan darken-2 z-depth-1 navbar">
               <li><NavLink exact to="/home" >Home</NavLink></li>
               <li><NavLink exact to="/home/signup" >SignUp</NavLink></li>
               <li><NavLink exact to='/home/login'>LOGIN</NavLink></li>
@@ -43,7 +45,7 @@ class Main extends Component {
             
             <Switch style={{ overflowY: 'scroll'}}>
               <Route exact path="/home" component={Home} />
-              <Route exact path="/home/login/:next?" component={Login} />
+              <Route exact path="/home/login/:next?" component={Login} authencicated={this.state.authencicated} />
               <Route exact path="/home/signup" component={Signup} />
               <Route><div> 404 page not found </div></Route>
             </Switch>   

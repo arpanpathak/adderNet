@@ -1,0 +1,50 @@
+.btn-login-with {
+	padding: 4px 4px 4px 4px !important;
+	height: auto !important;
+	width: 100% !important;
+	margin-top: 10px;
+	background: red !important;
+}
+.btn-login-with:disabled {
+	padding: 1px 1px 1px 1px !important;
+	height: auto !important;
+	background: #00acc1 !important;	
+	color : #fff !important;
+
+}
+.Login {
+
+}
+.login-title {
+	height: 50px !important;
+	margin-top: -20px !important;
+	font-size: 22px !important;
+	text-align: center;
+	padding-top: 10px;
+	background: #263238 !important;
+	color: #fff !important;
+}
+.btn-before {
+	float: left !important;
+}
+.login-btn {
+	padding: 0 0 0 0 !important;
+}
+.Login .collection-item a{
+	animation-name: zoom-effect;
+	animation-duration: 3s;
+	animation-iteration-count: 1;
+}
+.Login .collection-item a:nth-child(odd){
+	animation-name: zoom-effect-reverse;
+	animation-duration: 3s;
+	animation-iteration-count: 1;
+}
+@keyframes zoom-effect{
+	0% { transform: scale(1.7,1.7) rotateZ(100deg) translateY(-15px); }
+	50% { transform: scale(1,1) rotateZ(0deg) translateY(0); }
+}
+@keyframes zoom-effect-reverse{
+	0% { transform: scale(1.7,1.7) rotateZ(-100deg) translateY(15px); }
+	50% { transform: scale(1,1) rotateZ(0deg) translateY(0); }
+}

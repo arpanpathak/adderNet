@@ -23,9 +23,9 @@ module.exports = (app,passport) => {
 	});
 
 	// an API to see whether the user is authenticated and authorized to view certain api or not...
-	app.post('/authenticated',(req,res) => {
+	app.get('/authenticated',(req,res) => {
 		// if user is authenticated then user will not be null in request object...
-		res.json({authenticated: true});
+		res.json({authenticated: true });
 	});
 
 	// user registration api... before using any model, use require('..') to import them
@@ -75,12 +75,14 @@ module.exports = (app,passport) => {
 	// any strategy you want.. to add OAuth strategy , edit the required setup file...
 
 	app.post('/login',(req,res) => {
-
+		console.log(req.body);
+		res.json( {'loggedin' : true } );
 	});
 	// logout api
 	app.get('/logout',(req,res) => {
 		req.logout();
 		req.user=null;
+		req.session.destroy();
 		res.json({ message: 'logged out','status': 'logged out'});
 	});
 
@@ -92,7 +94,7 @@ module.exports = (app,passport) => {
 	// google OAuth callback URI
 	app.get('/auth/google/callback',
 	    	passport.authenticate('google'),
-	    	(req,res)=> { res.send(helpers.json_to_html(req.user)) }
+	    	(req,res) => res.send(helpers.json_to_html(req.user))
 	);
 
 
@@ -100,7 +102,7 @@ module.exports = (app,passport) => {
 	// facebook OAuth callback URI... 
 	app.get('/auth/facebook/callback',
 	  passport.authenticate('facebook', { failureRedirect: '/authFailed' }),
-	  (req,res)=> { res.send(helpers.json_to_html(req.user)) } 
+	  (req,res)=> { req.session.save((err)=>res.send(helpers.json_to_html(req.user)) ) } 
 	);
 
 

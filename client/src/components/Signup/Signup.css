@@ -4,3 +4,22 @@ label.active
 	color: #179973 !important;
 	font-size: 15px !important;
 }
+.signup-icon {
+	text-align: center !important;
+	margin: 5px 5px 5px 5px;
+	font-size: 25px;
+}
+.signup-container {
+	width: 30% !important;
+}
+
+@media only screen and (max-width: 1224px ) {
+	.signup-container {
+		width: 55% !important;
+	}
+}
+@media only screen and (max-width: 768px ) {
+	.signup-container {
+		width: 100% !important;
+	}
+}

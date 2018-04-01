@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Signup.css';
 import $ from 'jquery';
-import { Row,Input,Icon,Button } from 'react-materialize';
+import { Row,Input,Icon,Button,Collection,CollectionItem } from 'react-materialize';
 
 class Signup extends Component {
   constructor() {
@@ -38,7 +38,6 @@ class Signup extends Component {
   render() {
     return (
        <div className='container row box blue-strip' >
-           
            <Input s={6} label="First Name"  id='firstName' onChange={ this.handleChange } icon='contacts'><Icon>insert_chart</Icon> </Input>  
            <Input s={6} label="Last Name" id='lastName' onChange={ this.handleChange } icon='contacts'/> 
            <Input type="password" label="password" s={12} icon='lock_open' onChange={ this.handleChange } id='password' />
@@ -47,6 +46,20 @@ class Signup extends Component {
            <Input type="number" label="Phone No" maxLength={10} id='phoneNo' s={12} onChange={ this.handleChange } icon='local_phone'  />
            <Input type="number" label="AADHAR No" s={12} icon='fingerprint' />
            <Button waves='light' style={{'width': '100%'}} disabled={!this.state.confirmed_password_matched} onClick={ this.handleSubmit }>CREATE ACCOUNT <Icon left>create</Icon> </Button>
+            <span className='grey-text'>OR You can SignUp with :- </span>
+           <Collection>
+             <CollectionItem >
+              <a className="waves-effect waves-light btn-floating signup-icon red " href="http://localhost:5000/auth/google">
+                <i className="fab fa-google"></i> 
+              </a>
+              <a className="waves-effect waves-light btn-floating signup-icon blue darken-4 " href="http://localhost:5000/auth/facebook">
+                <i className="fab fa-facebook"></i> 
+              </a>
+              <a className="waves-effect waves-light btn-floating signup-icon blue-grey darken-4 " href="http://localhost:5000/auth/facebook">
+                <i className="fab fa-github"></i> 
+              </a>
+              </CollectionItem>
+            </Collection>
        </div>
 
 

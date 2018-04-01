@@ -29,7 +29,7 @@ class Nav extends Component {
         <Input type="text" className="search" label="Type here to search" s={6} icon="search" 
          style={{ backgroundColor: '#123243',color: '#fff'}} />
        </NavItem>
-        <NavItem href="#">
+        <NavItem href="/profile/messenger">
           <i className="fas fa-comments nav-icon"></i> Messenger<span className='blue-grey new badge'>4</span>
 
         </NavItem>
@@ -39,21 +39,7 @@ class Nav extends Component {
               <i className="fas fa-bell nav-icon"></i> Notifications
           </NavItem>
            } style={{ marginTop: '50px',background: '#fff' }}> 
-           <Collection>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
-            <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
+           <Collection style={{ background: '#fff'}}>
             <CollectionItem><Icon className="noti">notifications_active</Icon> dummy notification </CollectionItem>
            </Collection>
         </Dropdown>

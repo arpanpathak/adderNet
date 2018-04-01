@@ -39,3 +39,7 @@ footer{
 
 	border-bottom-left-radius: 8px !important;
 }
+
+.top-margin {
+	margin-top: 64px !important; 
+}
