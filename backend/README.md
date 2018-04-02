@@ -11,8 +11,9 @@ The uws folder causes some problems with socket.io running properly, Replacing t
 
 # MongoDB server
 MongoDB server is required, paste the MongoDB url at /config/keys
-
+Currently our MongoDB hosted on Google Cloud Service
 # Start Server
 node server/nodemon server
 
 ```
+

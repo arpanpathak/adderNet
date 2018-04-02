@@ -13,6 +13,15 @@ label.active
 	width: 30% !important;
 }
 
+.signup-title {
+	height: 50px !important;
+	margin-top: -5px !important;
+	font-size: 22px !important;
+	text-align: center;
+	padding-top: 10px;
+	background: lightblue !important;
+	color: #333 !important;
+}
 @media only screen and (max-width: 1224px ) {
 	.signup-container {
 		width: 55% !important;

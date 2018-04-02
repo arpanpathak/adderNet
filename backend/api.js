@@ -1,8 +1,10 @@
 /*** import your models here ***/
-const User=require('./models/User.js');
+const mongoose = require('mongoose');
+
+const User=mongoose.model('user');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
-
+var prettyHtml = require('json-pretty-html').default; 
 /* internal API */
  // this piece of code is moved to /lib/helpers.js file
 /* end of this section */
@@ -25,41 +27,43 @@ module.exports = (app,passport) => {
 	// an API to see whether the user is authenticated and authorized to view certain api or not...
 	app.get('/authenticated',(req,res) => {
 		// if user is authenticated then user will not be null in request object...
-		res.json({authenticated: true });
+		res.json({authenticated: ( req.isAuthenticated() ) });
 	});
 
-	// user registration api... before using any model, use require('..') to import them
-	// from /models directory of this project..
-	app.post('/register',(req,res) => {
-	  console.log(req.body);
-	  res.string(`hello${req.body.firstName}`);
-	});
-
+	//User Registration API...
 	app.post('/registerUser',(req,res) => {
-		//Sanity check
-		var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
-		var password = typeof(req.body.password) == 'string' && req.body.password.length > 7 ? req.body.password : false;
-		if(email && password){
-			//hashing password
-			var hash = helpers.hash(password);
-			//Store user
-			new User({'email':email,'password':hash}).save((newUser)=>{
-						!newUser? res.json({"success" : "Created user"}) :
-								  res.json({"error" : "Unable to create user"});
+		User.findOne({ $or:[ {email: req.body.email},{aadharNo: req.body.aadharNo} ]} ,
+					//check if email Id already registered
+				 (err,user)=>{
+			 		if(user)
+						res.json({"status":"failed","error":"email id or aadharNo already registered"})
+					else{
+						//Sanity check
+						var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
+						var password = typeof(req.body.password) == 'string' && req.body.password.length > 7 ? req.body.password : false;
+						var phone = req.body.phoneNo,aadharno,aadharNo=req.body.aadharNo;
+						if(email && password && phone ){
+							//hashing password
+							var hash = helpers.hash(password);
+							//Store user
+							new User({'email':email,'password':hash,'aadhaNno': aadharNo,date_created: Date.now()}).save((newUser)=>{
+										console.log
+										!newUser? res.json({"status" : "success","error":""}) :
+												  res.json({"error" : "Unable to create user"});
+										}
+									);
+						}else{
+							res.json({"error" : "Invalid email and password type"});
 						}
-					);
-		}else{
-			res.json({"Error" : "Invalid email and password type"});
-		}
+					}
+
+				 }
+		);
+
+		
 
 	});
 
-	app.post('/auth',passport.authenticate('email-local', {successRedirect: '/auth', failureRedirect: '/authFailed' }),
-		(req,res)=>{
-
-		}
-	);
-	
 	app.get('/authFailed',(req,res)=>res.json({'error': 'authentication failed!'}));
 
 	// delete all user
@@ -74,7 +78,8 @@ module.exports = (app,passport) => {
 	// this is the login api, here use passportJS callbacks to authenticate using
 	// any strategy you want.. to add OAuth strategy , edit the required setup file...
 
-	app.post('/login',(req,res) => {
+	app.post('/login',passport.authenticate(['email-local','phone-local'],{failureRedirect: '/authFailed' }),
+	  (req,res) => {
 		console.log(req.body);
 		res.json( {'loggedin' : true } );
 	});
@@ -82,8 +87,7 @@ module.exports = (app,passport) => {
 	app.get('/logout',(req,res) => {
 		req.logout();
 		req.user=null;
-		req.session.destroy();
-		res.json({ message: 'logged out','status': 'logged out'});
+		req.session.destroy( ()=> res.json({ message: 'logged out','status': 'logged out'}) );
 	});
 
 	// google oauth API
@@ -105,5 +109,10 @@ module.exports = (app,passport) => {
 	  (req,res)=> { req.session.save((err)=>res.send(helpers.json_to_html(req.user)) ) } 
 	);
 
-
+	app.get('/create',(req,res)=> { new User({email: 'abcd@gmail.com',aadharNo: '1234',date_created: Date.now()}).save(); res.send('done') });
+	app.get('/all_users',(req,res)=> { 
+		User.find({},(err,user)=>{
+			res.send( user ); 
+		});
+	});
 }

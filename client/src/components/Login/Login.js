@@ -13,37 +13,58 @@ class Login extends Component {
       userid : '',
       password: '',
       keeploggedin: false,
-      error: 'Unable to login'
+      error: '',
+      loader: false,
     };
   }
 
   componentDidMount() {
-    $('.collection-item').hide();
-    $('.collection-item').fadeIn();
+    
   }
   handleChange = (e) => {
     this.setState( { [e.target.id]: e.target.value } );
   }
   handleLogin = (e) => {
-    console.log(this.state);
-    $.post('/login',{userid:this.state.userid,password: this.state.password},(res)=> { console.log(res); });
+    this.setState({loader: true}); // add spinner...
+    $.post('/login',{userid:this.state.userid,password: this.state.password},(res)=> { 
+      console.log(res);
+      if(res.error) this.setState({error: res.error});
+      else this.setState()
+      this.setState({loader: false});
+    });
+
+    e.preventDefault(); 
   }
   render() {
   
     return (   
-       <div className='Login container row box grey-strip signup-container' style={{ 'paddingTop': '20px'}}>
+       <form className='Login container row box grey-strip signup-container' style={{ 'paddingTop': '20px'}}
+          onSubmit={ this.handleLogin} >
           {/*** Login Container Body ***/ }
           <div className='login-container-body'>
            <div className="card login-title"><i className="btn-before fab fa-asymmetrik"></i>LOGIN to adderNet { this.state.successRedirectURL } </div>
            
            <div className='col l12 s12 row'>
-             <Input s={12} label="Email id or phone no"  id='userid' icon='email'  onChange={ this.handleChange }/>   
-             <Input type='password' s={12} label="password" id='password' icon='lock_open'  onChange={ this.handleChange }/>
+             <Input required s={12} label="Email id or phone no"  id='userid' icon='email'  onChange={ this.handleChange }/>   
+             <Input required type='password' s={12} label="password" id='password' icon='lock_open'  onChange={ this.handleChange }/>
              <Input type='checkbox' s={7} label="keep me logged in" id='keeploggedin' style={{ 'marginLeft': '20px !important'}}  onChange={ this.handleChange }/> 
              
-             <Chip s={5} > { this.state.error } </Chip>
+             {/* display spinner when logging in */}
+             { this.state.loader && 
+               (<h5 className='cyan-text text-darken-2 col s12' style={{paddingLeft: '20px'}}><i className="fas fa-sync fa-spin"></i> Signing In....</h5>) 
+             }
+
+             {/* display error message if any */ }
+             { this.state.error && 
+               (<div className='col s12 row' style={{ paddingLeft: '20px'}}>
+                 <div className='error-message col s12' style={{color: '#333'}}>
+                  <i className="fas fa-exclamation-triangle"></i> { this.state.error }
+                 </div>
+               </div>) 
+             }
+
              <div className='row col s12'>
-              <Button className="waves-effect waves-light btn social google col s12 btn-login-with red darken-3" onClick={ this.handleLogin}>
+              <Button type="submit" className="waves-effect waves-light col s12 btn-login-with blue lighten-1" >
                 <i className="signup-icon fab fa-centercode btn-before"></i> <span > LOGIN</span>
               </Button>
               <Collection className='z-depth-4'>
@@ -67,7 +88,7 @@ class Login extends Component {
            </div>
           </div> {/** end of login-container-body**/ }
     
-      </div>
+      </form>
 
     );
   }

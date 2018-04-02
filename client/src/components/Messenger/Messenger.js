@@ -14,7 +14,43 @@ class Messenger extends Component {
   }
   componentDidMount() { }
 
-  render = ()=> <div className="your-component-name"> Messenger </div> ;
+  render(){ 
+  	return(
+  		<div className="Messenger row"> 
+ 			<div className='col s5 l3 z-depth-2 row' style={{ height: 'calc( 100vh - 60px )',padding: '0 0 0 0'}}>
+ 				<Input s={12} type="search" icon='search' placeholder='Type here to search' style={{marginLeft: '-10px'}} />
+ 				<div className="people-container grey lighten-4 col s12" style={{ height: 'calc(100vh - 140px)', overflow: 'auto'}}>
+ 				<Collection>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 					<CollectionItem> Friend1</CollectionItem>
+ 				</Collection>
+ 				</div>
+ 			</div>
+ 			<div className='col l9 s7' style={{ height: 'calc( 100vh - 60px )' }}>
+ 				lkjkj
+ 			</div>
+  		</div>
+
+  	);
+  } 
 }
 
 export default Messenger;

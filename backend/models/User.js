@@ -5,14 +5,15 @@ const userSchema = new mongoose.Schema({
   userid: mongoose.Schema.Types.ObjectId,
   username: String,
   email: { type:String, unique: false},
+  googleId: { type:String, unique: false},
+  fbId: { type:String, unique: false},
+  aadharNo: { type: String},
   phone: String,
   password: String,
 
   // personal information....
   name: String,
   gender: String,
-  googleId: { type:String, unique: false},
-  fbId: { type:String, unique: false},
   profilePic: String, // static url of profile pic
   coverPic: String,  // static url of cover pic
 
@@ -28,6 +29,5 @@ const userSchema = new mongoose.Schema({
 
 });
 
-var User = mongoose.model('user',userSchema);
+mongoose.model('user',userSchema);
 
-module.exports = User;

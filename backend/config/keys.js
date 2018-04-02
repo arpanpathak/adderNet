@@ -1,7 +1,7 @@
 // add this file to .gitignore
 module.exports = {
   mongodb:{
-    db: 'mongodb://localhost:27017/chatbox'
+    db: 'mongodb://addernet:Hackifyoucan@ds131237.mlab.com:31237/addernet'
   },
   session:{
     name: 'adderKookie',

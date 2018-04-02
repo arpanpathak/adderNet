@@ -4,8 +4,9 @@ const passport = require('passport'),
       FacebookStrategy = require('passport-facebook').Strategy,
       keys = require('./keys');
 const helpers = require('../lib/helpers');
-var User = require('../models/User');
-
+const mongoose = require('mongoose')
+     ,User=mongoose.model('user');
+     
 passport.serializeUser((user,done)=>{
   done(null, user.id);
 });
@@ -21,7 +22,7 @@ passport.deserializeUser((user,done)=>{
 
 // authentication using email and password...
 passport.use('email-local',new localStrategy({
-  usernameField: 'email',
+  usernameField: 'userid',
   passwordField: 'password'
 },(email, password, done)=>{
   User.findOne({ email : email}).then((currentUser)=>{
@@ -41,12 +42,12 @@ passport.use('email-local',new localStrategy({
 
 // authentication using phone and password...
 passport.use('phone-local',new localStrategy({
-  usernameField: 'phone',
+  usernameField: 'userid',
   passwordField: 'password'
-},(email, password, done)=>{
+},(phone, password, done)=>{
   User.findOne({ phone : phone}).then((currentUser)=>{
       if(currentUser){
-        if(currentUser.phone == phone && currentUser.password == password){
+        if(currentUser.phone == phone && currentUser.password == helpers.hash(password) ){
           done(null, currentUser);
         }
         else{
@@ -68,7 +69,16 @@ passport.use(new GoogleStrategy(
                  },(accessToken, refreshToken, profile, done) => { 
                       console.log('Google OAuth accessToken ',accessToken);
                       console.log('Google OAuth refreshToken',refreshToken );  
-                      console.log('User info got:- ',profile);  
+                      console.log('User info got:- ',profile);
+                      User.findOne({googleId: profile.id},(user)=>{
+                        if(user) {
+                          console.log('user already created ',user);
+                        }else{
+                          // new User({googleId: profile.id,date_created: Date.now(), name: profile.displayName,
+                          //           email: profile.emails[0].value }).save();
+                          console.log('user not created');
+                        }
+                      });  
                       return done(null,profile);
                   }
                 ) 
