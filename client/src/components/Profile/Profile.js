@@ -15,12 +15,15 @@ class Profile extends Component {
   constructor() {
     super();
     this.state = {
-      authenticated: false
+      authenticated: false,
+      user: null,
     };
   }
 
   componentDidMount() {
-    $.get( '/authenticated',(res)=>{ this.setState( { authenticated: res.authenticated} ); } );
+    $.get( '/authenticated',(res)=>{ 
+            this.setState( { authenticated: res.authenticated,user: res.user} ); 
+          });
   }
 
   render() {
@@ -30,16 +33,16 @@ class Profile extends Component {
     return ( 
       
        <div>
-       <Nav />
+       <Nav user={this.state.user}/>
        
        <div className='row'>
            
            <div className="col s12 l10  row" style={{ height:'100%'}}>
-              <Switch>
-               <Route exact path="/profile/feed" render={()=>(<div>create news feed component here</div>)} />
+              <div>
+               <Route exact path="/profile/feed" render={()=>(<div>{ JSON.stringify(this.state.user) }</div>)} />
                <Route exact path="/profile/messenger" component={Messenger} />
                <Route render={()=><div>Link not found</div>} />
-              </Switch>
+              </div>
            </div>
            <div className="col l2 hide-on-med-and-down z-depth-2" style={{ position: 'fixed', 'height': '100%',right: '0',padding: '0' }}>
             

@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
      ,User=mongoose.model('user');
      
 passport.serializeUser((user,done)=>{
-  done(null, user.id);
+  done(null, user._id);
 });
 
 passport.deserializeUser((user,done)=>{
@@ -73,13 +73,15 @@ passport.use(new GoogleStrategy(
                       User.findOne({googleId: profile.id},(user)=>{
                         if(user) {
                           console.log('user already created ',user);
+                          done(null,user)
                         }else{
-                          // new User({googleId: profile.id,date_created: Date.now(), name: profile.displayName,
-                          //           email: profile.emails[0].value }).save();
+                          let user=new User({googleId: profile.id,date_created: Date.now(), name: profile.displayName,
+                                    email: profile.emails[0].value }).save();
                           console.log('user not created');
+                          done(null,user);
                         }
                       });  
-                      return done(null,profile);
+              
                   }
                 ) 
              );

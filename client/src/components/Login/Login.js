@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import './Login.css';
 import $ from 'jquery';
-import { Row,Input,Icon,Button,Collection,CollectionItem,Redirect,Chip } from 'react-materialize';
+import {Redirect} from 'react-router-dom';
+import { Row,Input,Icon,Button,Collection,CollectionItem,Chip } from 'react-materialize';
 
 class Login extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      authenticated : props.authenticated,
+      authenticated : false,
       successRedirectURL: props.successRedirectURL,
       userid : '',
       password: '',
@@ -28,8 +29,10 @@ class Login extends Component {
     this.setState({loader: true}); // add spinner...
     $.post('/login',{userid:this.state.userid,password: this.state.password},(res)=> { 
       console.log(res);
-      if(res.error) this.setState({error: res.error});
-      else this.setState()
+      if(res.error) 
+        this.setState({error: res.error});
+      else 
+        this.setState({authenticated: true});
       this.setState({loader: false});
     });
 
@@ -37,7 +40,10 @@ class Login extends Component {
   }
   render() {
   
+    if(this.state.authenticated)
+      return <Redirect to='/profile'/>;
     return (   
+
        <form className='Login container row box grey-strip signup-container' style={{ 'paddingTop': '20px'}}
           onSubmit={ this.handleLogin} >
           {/*** Login Container Body ***/ }

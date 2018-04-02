@@ -27,7 +27,7 @@ module.exports = (app,passport) => {
 	// an API to see whether the user is authenticated and authorized to view certain api or not...
 	app.get('/authenticated',(req,res) => {
 		// if user is authenticated then user will not be null in request object...
-		res.json({authenticated: ( req.isAuthenticated() ) });
+		res.json({authenticated: req.isAuthenticated(), user: req.user });
 	});
 
 	//User Registration API...
@@ -41,13 +41,14 @@ module.exports = (app,passport) => {
 						//Sanity check
 						var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
 						var password = typeof(req.body.password) == 'string' && req.body.password.length > 7 ? req.body.password : false;
-						var phone = req.body.phoneNo,aadharno,aadharNo=req.body.aadharNo;
-						if(email && password && phone ){
+						var phone = req.body.phoneNo,aadharno,aadharNo=req.body.aadharNo,
+							name=req.body.firstName+" "+req.body.lastName;
+						if(name && email && password && phone ){
 							//hashing password
 							var hash = helpers.hash(password);
 							//Store user
-							new User({'email':email,'password':hash,'aadhaNno': aadharNo,date_created: Date.now()}).save((newUser)=>{
-										console.log
+							new User({'name': name,'email':email,'password':hash,'aadhaNno': aadharNo,date_created: Date.now(),
+									   'phone': phone}).save((newUser)=>{
 										!newUser? res.json({"status" : "success","error":""}) :
 												  res.json({"error" : "Unable to create user"});
 										}
@@ -80,7 +81,7 @@ module.exports = (app,passport) => {
 
 	app.post('/login',passport.authenticate(['email-local','phone-local'],{failureRedirect: '/authFailed' }),
 	  (req,res) => {
-		console.log(req.body);
+	  	console.log(req);
 		res.json( {'loggedin' : true } );
 	});
 	// logout api

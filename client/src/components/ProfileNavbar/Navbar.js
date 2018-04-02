@@ -10,15 +10,13 @@ class Nav extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      authenticated: false,
-      dp: "https://www.nexia-sabt.co.za/wp-content/uploads/2016/05/dummy.jpg", // user dp url.. fetch from server..
-      user: "",
-
+     // user dp url.. fetch from server..
+      user: this.props.user,
     };
   }
 
   componentDidMount() {
-    
+    console.log(this.state)
   }
 
   render() {
@@ -35,7 +33,7 @@ class Nav extends Component {
         </NavItem>
         
         <Dropdown trigger={
-          <NavItem href="#">
+          <NavItem href={null}>
               <i className="fas fa-bell nav-icon"></i> Notifications
           </NavItem>
            } style={{ marginTop: '50px',background: '#fff' }}> 
@@ -60,13 +58,13 @@ class Nav extends Component {
           >
           <SideNavItem userView
             user={{
-              background: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlLOGsWxqAZGjKm8C2BxI2w4kNw_CcQg8wJqRaqKKcdQPhlUJU',
-              image: this.state.dp,
+              // background: this.state.user.coverPic? this.state.user.coverPic: 'blue',
+              // image: this.state.user.profilePic? this.state.user.profilePic: 'none',
               name: 'badassArpan',
-              email: 'arpan.pathak47@gmail.com'
+              email: this.state.user.email
             }}
           />
-          <SideNavItem href='#!icon' icon='art_track'>timeline</SideNavItem>
+          <SideNavItem href='#!icon' icon='art_track'>{ this.state.user.email }</SideNavItem>
           <SideNavItem href='#!second' icon="filter_none">pages</SideNavItem>
           <SideNavItem divider />
           <SideNavItem subheader icon="group">groups</SideNavItem>
