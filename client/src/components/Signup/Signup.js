@@ -35,7 +35,7 @@ class Signup extends Component {
   }
   handleSubmit = (e) => {
     // add loading icon until we get some response from server...
-    this.setState({loader: true});
+    this.setState({loader: true,error: ''});
     $.post('/registerUser', this.state ,(res)=> { 
         console.log(res),
         this.setState({ loader: false,error : res.error,success_message: (res.status==="success"?"success": null ) });
@@ -57,7 +57,7 @@ class Signup extends Component {
              <Input required type="password" label="Confirm Password" s={12} icon={ this.state.confirmed } onChange={this.handleConfirm}  />
              <Input required type="email" label="Email Id" s={12} id='email' onChange={ this.handleChange } icon='email'/>
              <Input required type="number" label="Phone No" maxLength={10} id='phoneNo' s={12} onChange={ this.handleChange } icon='local_phone'  />
-             <Input required type="number" label="AADHAR No" s={12} icon='fingerprint' />
+             <Input type="number" label="AADHAR No" s={12} icon='fingerprint' />
              {this.state.message && (<Chip> { this.state.message }</Chip>) }
              
              {/*  broadcast info ... */}

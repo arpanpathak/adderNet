@@ -9,13 +9,13 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      authenticated : false,
+      authenticated : false, 
       successRedirectURL: props.successRedirectURL,
       userid : '',
       password: '',
       keeploggedin: false,
-      error: '',
-      loader: false,
+      error: '', // error message during authentication will be set to this..
+      loader: false, // for loading animation...
     };
   }
 
@@ -26,7 +26,7 @@ class Login extends Component {
     this.setState( { [e.target.id]: e.target.value } );
   }
   handleLogin = (e) => {
-    this.setState({loader: true}); // add spinner...
+    this.setState({loader: true,error: ''}); // add spinner...
     $.post('/login',{userid:this.state.userid,password: this.state.password},(res)=> { 
       console.log(res);
       if(res.error) 
@@ -57,7 +57,7 @@ class Login extends Component {
              
              {/* display spinner when logging in */}
              { this.state.loader && 
-               (<h5 className='cyan-text text-darken-2 col s12' style={{paddingLeft: '20px'}}><i className="fas fa-sync fa-spin"></i> Signing In....</h5>) 
+               (<h5 className='cyan-text text-darken- col s12' style={{paddingLeft: '20px'}}><i className="fas fa-sync fa-spin"></i> Signing In....</h5>) 
              }
 
              {/* display error message if any */ }

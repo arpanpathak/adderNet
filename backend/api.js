@@ -32,27 +32,38 @@ module.exports = (app,passport) => {
 
 	//User Registration API...
 	app.post('/registerUser',(req,res) => {
-		User.findOne({ $or:[ {email: req.body.email},{aadharNo: req.body.aadharNo} ]} ,
+		User.findOne({ $or:[ {email: req.body.email},{aadharNo: req.body.aadharNo},{phone: req.body.phone} ]} ,
 					//check if email Id already registered
 				 (err,user)=>{
-			 		if(user)
-						res.json({"status":"failed","error":"email id or aadharNo already registered"})
+			 		if(user){
+			 			let msg="";
+			 			if(user.email==req.body.email) msg+='email,';
+			 			if(user.aadharNo==req.body.aadharNo) msg+='aadharNo,';
+			 			if(user.phoneNo==req.body.phone) msg+='phone no,';
+			 			msg+=' already registered';
+						res.json({"status":"failed","error": msg});
+			 		}
 					else{
 						//Sanity check
 						var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
 						var password = typeof(req.body.password) == 'string' && req.body.password.length > 7 ? req.body.password : false;
 						var phone = req.body.phoneNo,aadharno,aadharNo=req.body.aadharNo,
 							name=req.body.firstName+" "+req.body.lastName;
+
+						// after sanity checking....	
 						if(name && email && password && phone ){
 							//hashing password
 							var hash = helpers.hash(password);
 							//Store user
-							new User({'name': name,'email':email,'password':hash,'aadhaNno': aadharNo,date_created: Date.now(),
-									   'phone': phone}).save((newUser)=>{
-										!newUser? res.json({"status" : "success","error":""}) :
-												  res.json({"error" : "Unable to create user"});
-										}
-									);
+							new User({'name': name,'email':email,'password':hash,'aadharNo': aadharNo,
+									  date_created: Date.now(),'phone': phone})
+									.save((newUser)=>{
+											// if new uer is null then there is a problem in database...
+											!newUser? res.json({"status" : "success","error":""}) :
+													  res.json({"error" : "Unable to create user"});
+								}
+							);
+
 						}else{
 							res.json({"error" : "Invalid email and password type"});
 						}
@@ -65,20 +76,18 @@ module.exports = (app,passport) => {
 
 	});
 
+	// use this as auth failed callback URL....
 	app.get('/authFailed',(req,res)=>res.json({'error': 'authentication failed!'}));
 
-	// delete all user
-	app.get('/delete_all',(req,res)=> User.remove({ },(err)=> res.send(err? err:  'cleared all users..') ) );
-
-	// API to send OTP
+	// API to send OTP... currently using free twilio message service...
 	app.get('/sendOTP',(req,res)=> helpers.sendTwilioSms("+919099994016","apni vogoban dada, ei nin OTP="+helpers.RandomStringGenerate(6),
 									(err)=> res.send(err?err:'sent') ) 
 			);
-
+	/*** =================================================================== ***/
 	/*** authentication API ***/
 	// this is the login api, here use passportJS callbacks to authenticate using
 	// any strategy you want.. to add OAuth strategy , edit the required setup file...
-
+	// EmailOTP will be added after implementing sendEmail( ) helper function...
 	app.post('/login',passport.authenticate(['email-local','phone-local'],{failureRedirect: '/authFailed' }),
 	  (req,res) => {
 	  	console.log(req);
@@ -98,7 +107,8 @@ module.exports = (app,passport) => {
 
 	// google OAuth callback URI
 	app.get('/auth/google/callback',
-	    	passport.authenticate('google'),
+	    	passport.authenticate('google',{ failureRedirect: '/authFailed',successRedirect: 'http://localhost:3000/profile' }),
+	    	// This part of code will only be executed if successRedirect is not set in passport.authenticate()
 	    	(req,res) => res.send(helpers.json_to_html(req.user))
 	);
 
@@ -106,14 +116,20 @@ module.exports = (app,passport) => {
 	app.get('/auth/facebook',passport.authenticate('facebook'));
 	// facebook OAuth callback URI... 
 	app.get('/auth/facebook/callback',
-	  passport.authenticate('facebook', { failureRedirect: '/authFailed' }),
+	  passport.authenticate('facebook', { failureRedirect: '/authFailed',successRedirect: 'http://localhost:3000/profile' }),
+	  // This part of code will only be executed if successRedirect is not set in passport.authenticate()
 	  (req,res)=> { req.session.save((err)=>res.send(helpers.json_to_html(req.user)) ) } 
 	);
+	/*** =================================================================== ***/
 
+	// Test API
+	/**** here are some unit tests done on the api.. USE this test APIs to test main APIs... ***/
 	app.get('/create',(req,res)=> { new User({email: 'abcd@gmail.com',aadharNo: '1234',date_created: Date.now()}).save(); res.send('done') });
 	app.get('/all_users',(req,res)=> { 
 		User.find({},(err,user)=>{
 			res.send( user ); 
 		});
 	});
+	// delete all user
+	app.get('/delete_all',(req,res)=> User.remove({ },(err)=> res.send(err? err:  'cleared all users..') ) );
 }
