@@ -1,21 +1,19 @@
 const mongoose = require('mongoose');
 
 const chatSchema = new mongoose.Schema({
-  by_id: String,
-  to_id: String,
+  by: Schema.Types.ObjectId,
+  to: Schema.Types.ObjectId,
   type: String,
-  message: mongoose.Schema.Types.Mixed,
+  message: {
+    type: String,
+    data: String,
+    react: Number
+  },
   time: Number,
-  read: Boolean
+  read: Boolean,
+  showMessage: Boolean
 });
 
-module.exports = function(by, from){
-  var Chat;
-  if(by>from){
-    Chat = mongoose.model(from+'chat'+by,chatSchema);
-  }
-  else{
-    Chat = mongoose.model(by+'chat'+from,chatSchema);
-  }
-  return Chat;
-};
+Chat = mongoose.model('Chat', chatSchema);
+
+module.exports = Chat;
