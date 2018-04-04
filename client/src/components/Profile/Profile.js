@@ -40,17 +40,17 @@ class Profile extends Component {
       return <div>You are not authorized to view this page <Link to={`/home/login/${window.location.href.split('/').pop()}` } > Click Here</Link> </div> ;
     
     return ( 
-       <div>
+       <div >
        <Nav user={this.state.user}/>
        
        <div className='row'>
            
            <div className="col s12 l10  row" style={{ height:'100%'}}>
-              <switch>
+              <Switch>
                <Route exact path="/profile/feed" render={()=>(<div>{ JSON.stringify(this.state.user) }</div>)} />
                <Route exact path="/profile/messenger" component={Messenger} />
                <Route render={()=><div>Link not found</div>} />
-              </switch>
+              </Switch>
            </div>
            <div className="col l2 hide-on-med-and-down z-depth-2" style={{ position: 'fixed', 'height': '100%',right: '0',padding: '0' }}>
             
@@ -64,7 +64,7 @@ class Profile extends Component {
                 <CollectionItem>friend1</CollectionItem>
               </Collection>
             </div>
-            <Input type="search" icon="search" style={{ marginLeft: '-10px', width: '100%'}} placeholder="Type here to search"/> 
+            <Input type="search" icon="search" style={{ marginLeft: '-10px'}} placeholder="Type here to search"/> 
            </div>
 
        </div>

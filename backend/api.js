@@ -33,47 +33,44 @@ module.exports = (app,passport) => {
 	//User Registration API...
 	app.post('/registerUser',(req,res) => {
 		User.findOne({ $or:[ {email: req.body.email},{aadharNo: req.body.aadharNo},{phone: req.body.phone} ]} ,
-					//check if email Id already registered
-				 (err,user)=>{
-			 		if(user){
-			 			let msg="";
-			 			if(user.email==req.body.email) msg+='email,';
-			 			if(user.aadharNo==req.body.aadharNo) msg+='aadharNo,';
-			 			if(user.phoneNo==req.body.phone) msg+='phone no,';
-			 			msg+=' already registered';
-						res.json({"status":"failed","error": msg});
-			 		}
-					else{
-						//Sanity check
-						var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
-						var password = typeof(req.body.password) == 'string' && req.body.password.length > 7 ? req.body.password : false;
-						var phone = req.body.phoneNo,aadharno,aadharNo=req.body.aadharNo,
-							name=req.body.firstName+" "+req.body.lastName;
+			//check if email Id already registered
+			 (err,user)=>{
+		 		if(user){
+		 			let msg="";
+		 			if(user.email==req.body.email) msg+='email,';
+		 			if(user.aadharNo==req.body.aadharNo) msg+='aadharNo,';
+		 			if(user.phoneNo==req.body.phone) msg+='phone no,';
+		 			msg+=' already registered';
+					res.json({"status":"failed","error": msg});
+		 		}
+				else{
+					//Sanity check
+					var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
+					var password = typeof(req.body.password) == 'string' && req.body.password.length > 7 ? req.body.password : false;
+					var phone = req.body.phoneNo,aadharno,aadharNo=req.body.aadharNo,
+						name=req.body.firstName+" "+req.body.lastName;
 
-						// after sanity checking....	
-						if(name && email && password && phone ){
-							//hashing password
-							var hash = helpers.hash(password);
-							//Store user
-							new User({'name': name,'email':email,'password':hash,'aadharNo': aadharNo,
-									  date_created: Date.now(),'phone': phone})
-									.save((newUser)=>{
-											// if new uer is null then there is a problem in database...
-											!newUser? res.json({"status" : "success","error":""}) :
-													  res.json({"error" : "Unable to create user"});
-								}
-							);
+					// after sanity checking....	
+					if(name && email && password && phone ){
+						//hashing password
+						var hash = helpers.hash(password);
+						//Store user
+						new User({'name': name,'email':email,'password':hash,'aadharNo': aadharNo,
+								  date_created: Date.now(),'phone': phone})
+								.save((newUser)=>{
+										// if new uer is null then there is a problem in database...
+										!newUser? res.json({"status" : "success","error":""}) :
+												  res.json({"error" : "Unable to create user"});
+							}
+						);
 
-						}else{
-							res.json({"error" : "Invalid email and password type"});
-						}
+					}else{
+						res.json({"error" : "Invalid email and password type"});
 					}
+				}
 
-				 }
+			}
 		);
-
-		
-
 	});
 
 	// use this as auth failed callback URL....
@@ -112,7 +109,7 @@ module.exports = (app,passport) => {
 	    	(req,res) => res.send(helpers.json_to_html(req.user))
 	);
 
-
+	// facebook OAuth API
 	app.get('/auth/facebook',passport.authenticate('facebook'));
 	// facebook OAuth callback URI... 
 	app.get('/auth/facebook/callback',
@@ -123,13 +120,6 @@ module.exports = (app,passport) => {
 	/*** =================================================================== ***/
 
 	// Test API
-	/**** here are some unit tests done on the api.. USE this test APIs to test main APIs... ***/
-	app.get('/create',(req,res)=> { new User({email: 'abcd@gmail.com',aadharNo: '1234',date_created: Date.now()}).save(); res.send('done') });
-	app.get('/all_users',(req,res)=> { 
-		User.find({},(err,user)=>{
-			res.send( user ); 
-		});
-	});
-	// delete all user
-	app.get('/delete_all',(req,res)=> User.remove({ },(err)=> res.send(err? err:  'cleared all users..') ) );
+	//importing the unit test file....
+	require('./tests.js'); 
 }

@@ -27,6 +27,7 @@
     "json-pretty-html": "^1.1.2",
     "mongoose": "*",
     "multer": "*",
+    "nodemailer": "^4.6.4",
     "passport": "*",
     "passport-facebook": "^2.1.1",
     "passport-google-oauth20": "^1.0.0",
