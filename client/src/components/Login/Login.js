@@ -27,6 +27,8 @@ class Login extends Component {
   }
   handleLogin = (e) => {
     this.setState({loader: true,error: ''}); // add spinner...
+
+    // login api call to expressJS server...
     $.post('/login',{userid:this.state.userid,password: this.state.password},(res)=> { 
       console.log(res);
       if(res.error) 
@@ -41,7 +43,7 @@ class Login extends Component {
   render() {
   
     if(this.state.authenticated)
-      return <Redirect to='/profile'/>;
+      return <Redirect to='/profile/feed'/>;
     return (   
 
        <form className='Login container row box grey-strip signup-container' style={{ 'paddingTop': '20px'}}

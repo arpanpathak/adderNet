@@ -32,7 +32,7 @@ class Main extends Component {
 
   render() {
     return (
-      <div>
+      <div >
         <Route path="/profile" component={Profile} />
         <Route exact path="/" render={ ()=><Redirect to="/home" /> } />
         <Route path="/home" render={ ()=>(
@@ -43,7 +43,7 @@ class Main extends Component {
               <li><NavLink exact to='/home/login'>LOGIN</NavLink></li>
             </Navbar>
             
-            <Switch style={{ overflowY: 'scroll'}}>
+            <Switch style={{ overflow: 'auto'}}>
               <Route exact path="/home" component={Home} />
               <Route exact path="/home/login/:next?" component={Login} authencicated={this.state.authencicated} />
               <Route exact path="/home/signup" component={Signup} />

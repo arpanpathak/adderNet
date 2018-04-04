@@ -57,7 +57,7 @@ class Signup extends Component {
              <Input required type="password" label="Confirm Password" s={12} icon={ this.state.confirmed } onChange={this.handleConfirm}  />
              <Input required type="email" label="Email Id" s={12} id='email' onChange={ this.handleChange } icon='email'/>
              <Input required type="number" label="Phone No" maxLength={10} id='phoneNo' s={12} onChange={ this.handleChange } icon='local_phone'  />
-             <Input type="number" label="AADHAR No" s={12} icon='fingerprint' />
+             <Input type="number" label="AADHAR No" s={12} icon='fingerprint' id='aadharNo' onChange={this.handleChange} />
              {this.state.message && (<Chip> { this.state.message }</Chip>) }
              
              {/*  broadcast info ... */}

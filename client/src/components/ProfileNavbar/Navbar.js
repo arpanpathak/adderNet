@@ -24,9 +24,7 @@ class Nav extends Component {
   render() {
     return ( 
        <Navbar href="/profile" right className="navbar blue darken-3 z-depth-2" brand={<i className="btn-before fab fa-asymmetrik"></i>}>
-          <NavItem onClick={ (e)=> false }>
-          
-          </NavItem>
+         
        </Navbar>
     );
         

@@ -32,14 +32,16 @@ module.exports = (app,passport) => {
 
 	//User Registration API...
 	app.post('/registerUser',(req,res) => {
-		User.findOne({ $or:[ {email: req.body.email},{aadharNo: req.body.aadharNo},{phone: req.body.phone} ]} ,
+		User.findOne({ $or:[ {email: req.body.email},
+							 {$and:  [{aadharNo: {"$ne":""}},{aadharNo: {"$ne":null}},{aadharNo: req.body.aadharNo} ] },
+							 {phone: req.body.phoneNo.toString()} ]} ,
 			//check if email Id already registered
 			 (err,user)=>{
 		 		if(user){
 		 			let msg="";
 		 			if(user.email==req.body.email) msg+='email,';
-		 			if(user.aadharNo==req.body.aadharNo) msg+='aadharNo,';
-		 			if(user.phoneNo==req.body.phone) msg+='phone no,';
+		 			if(user.aadharNo!=null && user.aadharNo!='' && user.aadharNo===req.body.aadharNo.toString()) msg+='aadharNo,';
+		 			if(user.phone===req.body.phoneNo.toString()) msg+='phone no,';
 		 			msg+=' already registered';
 					res.json({"status":"failed","error": msg});
 		 		}
@@ -47,7 +49,7 @@ module.exports = (app,passport) => {
 					//Sanity check
 					var email = req.body.email.match(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) !== null ? req.body.email : false;
 					var password = typeof(req.body.password) == 'string' && req.body.password.length > 7 ? req.body.password : false;
-					var phone = req.body.phoneNo,aadharno,aadharNo=req.body.aadharNo,
+					var phone = req.body.phoneNo.toString(),aadharno,aadharNo=req.body.aadharNo.toString(),
 						name=req.body.firstName+" "+req.body.lastName;
 
 					// after sanity checking....	
@@ -121,5 +123,5 @@ module.exports = (app,passport) => {
 
 	// Test API
 	//importing the unit test file....
-	require('./tests.js'); 
+	require('./tests.js')(app); 
 }

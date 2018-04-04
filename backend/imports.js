@@ -11,6 +11,7 @@ const keys = require('./config/keys.js');
 
 module.exports = (app) => {
 	require('./models/User');
+	require('./models/Chat');
 	const passport = require('./config/passport-setup.js');
 
 	app.use( bodyParser.urlencoded({ extended: true} ) );

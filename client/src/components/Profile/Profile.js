@@ -45,7 +45,7 @@ class Profile extends Component {
        
        <div className='row'>
            
-           <div className="col s12 l10  row" style={{ height:'100%'}}>
+           <div className="col s12 l5  row" style={{ height:'100%',position: 'fixed','left': '0'}}>
               <Switch>
                <Route exact path="/profile/feed" render={()=>(<div>{ JSON.stringify(this.state.user) }</div>)} />
                <Route exact path="/profile/messenger" component={Messenger} />

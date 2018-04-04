@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Home.css';
-import { Card,Slider,Slide,Button,Footer } from 'react-materialize';
+import { Card,Slider,Slide,Button,Footer,Row } from 'react-materialize';
 import { Link } from 'react-router-dom';
 // A stateless react component class
 
@@ -9,29 +9,15 @@ class Home extends Component {
 	constructor() {
 		super();
 		this.state= {
-			creators: [  ],
-			authenticated: true
 		}
 	}
 
 	componentDidMount() {
-		// testing fetch api........
-		// return fetch('/creators')
-		//       .then((response) => response.json())
-		//       .then((responseJson) => {
-
-		//         this.setState( { creators: responseJson } )
-
-		//       })
-		//       .catch((error) =>{
-		//         console.error(error);
-		//       });
 	}
 
 	render() {
-		if( this.state.authenticated )
 		return (
-			<div className="row" >
+			<Row>
 
 				<Slider>
 				  <Slide
@@ -43,17 +29,17 @@ class Home extends Component {
 				    src=""
 				    title="Why are you waiting? Create an account"
 				    placement="right">
-				    <Link to="/signup"><button className='btn orange darken-2'>SIGN UP </button> </Link>
+				    <Link to="/home/signup"><button className='btn orange darken-2'>SIGN UP </button> </Link>
 				  </Slide>
 				  <Slide
-				    src="http://lorempixel.com/580/250/nature/3"
-				    title="say good bye! to facebook,instagram,twitter"
-							    placement="right">
-				    <span className="amber-text lighten-1"> No word limit like Twitter, now you can dislike posts, and many more features.... </span> 
+				   
+				    title="Experiance real social network"
+							    >
+				    <span className="grey-text text-lighten-1"> No word limit like Twitter, now you can dislike posts, and many more features.... </span> 
 				  </Slide>
 				</Slider>
 
-				<Footer copyrights="&copy; 2018 by adderNet"
+				<Footer style={{ marginBottom: '0'}} copyrights="&copy; 2018 by adderNet"
 				  moreLinks={
 				    <a className="grey-text text-lighten-4 right" href="#!">More Links</a>
 				  }
@@ -65,17 +51,13 @@ class Home extends Component {
 				      <li><a className="grey-text text-lighten-3" href="#!">Link 4</a></li>
 				    </ul>
 				  }
-				  className='example blue-grey darken-4'
+				  className='example black-gradient'
 				>
 				    <h5 className="white-text">Footer Content</h5>
 				    <p className="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
-				</Footer>;
+				</Footer>
 
-			</div>
-		);
-		else return ( 
-			<h5 className="truncate"> You are not authenticated to view this page. Change the Home component of the project. 
-		</h5> 
+			</Row>
 		);
 	}
 }
