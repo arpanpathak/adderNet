@@ -11,7 +11,7 @@ import ReactLoading from 'react-loading';
 
 /*** import your components here ***/
 import Messenger from './../Messenger/Messenger';
-
+import Error404 from './../404/404';
 const Loading = ({ type, color }) => (
     <div style={{paddingTop: 'calc(50vh - 100px)', marginLeft: 'calc(50% - 100px)'}}>
     <ReactLoading type={type} color={color} height={'200px'} width={'200px'} delay={0}/>
@@ -45,17 +45,19 @@ class Profile extends Component {
        
        <div className='row'>
            
-           <div className="col s12 l5  row" style={{ height:'100%',position: 'fixed','left': '0'}}>
+           <div className="col s12 l10 row" style={{ height:'100%',position: 'fixed','left': '0',overflow: 'auto',padding: '10px 10px 10px 10px'}}>
               <Switch>
-               <Route exact path="/profile/feed" render={()=>(<div>{ JSON.stringify(this.state.user) }</div>)} />
+               <Route exact path="/profile/feed" render={()=>(<div className='white z-depth-2' style={{ height: '100%'}}> 
+
+                </div>)} />
                <Route exact path="/profile/messenger" component={Messenger} />
-               <Route render={()=><div>Link not found</div>} />
+               <Route component={Error404} />
               </Switch>
            </div>
-           <div className="col l2 hide-on-med-and-down z-depth-2" style={{ position: 'fixed', 'height': '100%',right: '0',padding: '0' }}>
+           <div className="col l2 hide-on-med-and-down z-depth-2" style={{ marginTop: '5px',position: 'fixed', 'height': '100%',right: '0',padding: '0' }}>
             
             <div className="people-container light-grey lighten-2" style={{ height: 'calc(100vh - 140px)', overflow: 'auto'}}>
-              <Collection>
+              <Collection header={<h6 className='blue-grey-text'>Online Users</h6> }>
                 <CollectionItem>friend1</CollectionItem>
                 <CollectionItem>friend1</CollectionItem>
                 <CollectionItem>friend1</CollectionItem>

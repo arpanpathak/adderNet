@@ -1,0 +1,45 @@
+.an {
+	position: relative; 
+  	top: 100px; 
+  	margin: 0 auto;
+	transform-origin:-70px 60px;
+	box-shadow:1px 1px 3px black;
+	animation:bounce 0.75s forwards linear;
+}
+.an:before{
+	position: absolute;
+	left: -40px;
+	top: 0;
+	content: " ";
+	width: 0; 
+  	height: 0; 
+  	border-top: 0px solid transparent;
+  	border-bottom: 20px solid transparent; 
+  	border-right: 40px solid lightgray;
+}
+.ab{
+	animation: anim 2s linear;
+}
+
+.heading-404 {
+	color: #FA194C; text-shadow: 1px 1px 2px black;
+}
+@keyframes bounce {
+	0%{transform:translateY(-500px);}
+	30%{transform:translateY(-300px);}
+	60%{transform:translateY(100px);}
+	80%{transform:translateY(50px);}
+	90%{transform:translateY(100px) translateX(10px);}
+	100%{transform:translateY(100px) translateX(10px);}
+}
+
+@keyframes rot {
+	/*0%{transform:translateY(100px) translateX(10px);}*/
+	30%{transform:rotateZ(50deg);}
+	50%{transform:rotateZ(-10deg);}
+
+}
+@keyframes anim {
+	30% { transform: rotateY(50deg);  }
+		1000% { transform: rotateY(-10deg); }
+}

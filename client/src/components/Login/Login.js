@@ -20,14 +20,19 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    
+    // if already authenticated then no need to login...
+    $.get( '/authenticated',(res)=>{ 
+            this.setState( { authenticated: res.authenticated,user: res.user,loading:false} ); 
+          });
   }
   handleChange = (e) => {
     this.setState( { [e.target.id]: e.target.value } );
   }
   handleLogin = (e) => {
-    this.setState({loader: true,error: ''}); // add spinner...
+   
 
+    this.setState({loader: true,error: ''}); // add spinner...
+    $.get('/authenticated',)
     // login api call to expressJS server...
     $.post('/login',{userid:this.state.userid,password: this.state.password},(res)=> { 
       console.log(res);

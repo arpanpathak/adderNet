@@ -45,6 +45,27 @@
 	float: right;
 }
 
+.profile-message {
+    position: relative !important; 
+    background: #333;
+    color: #fff;
+    margin-top: 5px !important;
+    padding: 20px 20px 20px 20px !important;
+    border-radius: 5px;
+
+}
+.profile-message:before {
+    content:"";
+    width: 0; 
+    height: 0; 
+    position: absolute;
+    top: calc(50% - 10px);
+    left: -10px;
+    border-top: 10px solid transparent;
+    border-bottom: 20px solid transparent; 
+    border-right: 20px solid #333; 
+}
+
 *::-webkit-scrollbar {
     width: 6px;
     height: 6px;
