@@ -66,7 +66,9 @@ class Profile extends Component {
                 <CollectionItem>friend1</CollectionItem>
               </Collection>
             </div>
+            <div className='Messenger'>
             <Input type="search" icon="search" style={{ marginLeft: '-10px'}} placeholder="Type here to search"/> 
+            </div>
            </div>
 
        </div>
