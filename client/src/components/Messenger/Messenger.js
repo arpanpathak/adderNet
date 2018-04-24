@@ -67,11 +67,7 @@ class Messenger extends Component {
           <div className='card messenger-message-to'>This is message</div> 
           <div className='card messenger-message-from'>This is message</div>  
           <div className='card messenger-message-from'>This is message</div> 
-          <div className='card messenger-message-to'>This is message</div> 
-          <div className='card messenger-message-from'>This is message</div>
-          <div className='card messenger-message-to'>This is message</div> 
-          <div className='card messenger-message-from'>This is message</div>  
-          <div className='card messenger-message-from'>This is message</div> 
+          
         </div>
  			</div>
   		</div>
