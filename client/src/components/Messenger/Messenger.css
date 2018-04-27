@@ -29,11 +29,11 @@
 	margin-top: -14px !important;
     background: #EAEDED;
     color: #fff;
+  
 }
 
 .messenger-message-to {
 	word-wrap: break-word !important;
-	width: 80%;
     position: relative !important; 
     background: #333;
     color: #fff;

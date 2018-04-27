@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema({
   blocked_users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   blocked_by: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
-  shares: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
-  messages: [ { from: String, time: { type: Date, default: Date.now } }]
+  shares: [ {type: mongoose.Schema.Types.ObjectId, ref: 'post'} ],
+  messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}]
 
 });
 
