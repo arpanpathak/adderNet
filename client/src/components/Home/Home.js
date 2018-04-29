@@ -38,6 +38,13 @@ class Home extends Component {
 							    >
 				    <span className="grey-text text-lighten-1"> No word limit like Twitter, now you can dislike posts, and many more features.... </span> 
 				  </Slide>
+				  
+				  <Slide
+				    src="https://www.hdwallpapers.in/walls/music_2-wide.jpg"
+				    title="Enjoy Unlimited Music"
+				    placement="center">Experience high quality music, all at one place
+				    <Link to="/music"></Link>
+				  </Slide>
 				</Slider>
 
 				<Footer style={{ marginBottom: '0'}} copyrights="&copy; 2018 by adderNet"
@@ -57,7 +64,6 @@ class Home extends Component {
 				    <h5 className="white-text">Footer Content</h5>
 				    <p className="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
 				</Footer>
-
 			</Row>
 		);
 	}
