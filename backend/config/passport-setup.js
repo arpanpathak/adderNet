@@ -14,7 +14,8 @@ passport.serializeUser((user,done)=>{
 
 passport.deserializeUser((user,done)=>{
   User.findById(user).then((user)=>{
-    done(null, user);
+    // only store user id, name and email 
+    done(null, { _id: user._id, name: user.name, email: user.email,coverPic: user.coverPic,profilePic: user.profilePic });
   });
 });
 

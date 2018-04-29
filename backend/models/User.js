@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+
   date_created: { type: Date  },
   userid: mongoose.Schema.Types.ObjectId,
   username: String,
-  email: { type:String, unique: false},
+  email: { type:String, unique: false },
   googleId: { type:String, unique: false},
   fbId: { type:String, unique: false},
   aadharNo: { type: String},
@@ -15,7 +16,7 @@ const userSchema = new mongoose.Schema({
   name: String,
   gender: String,
   profilePic: String, // static url of profile pic
-  coverPic: String,  // static url of cover pic
+  coverPic: String,  // static url of cover pic,
 
   // social information ....
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
@@ -25,8 +26,8 @@ const userSchema = new mongoose.Schema({
   blocked_by: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],
   posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
   shares: [ {type: mongoose.Schema.Types.ObjectId, ref: 'post'} ],
-  messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}]
-
+  messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
+  notification: [ {} ],
 });
 
 mongoose.model('user',userSchema);

@@ -10,14 +10,17 @@ const keys = require('./config/keys.js');
 
 
 module.exports = (app) => {
+
 	require('./models/User');
-	require('./models/Chat');
+	require('./models/Chat').Message;
+	require('./models/Chat').Conversation;
+	require('./models/Post');
 	const passport = require('./config/passport-setup.js');
 
 	app.use( bodyParser.urlencoded({ extended: true} ) );
 	app.use(cookieParser());
 	// database connection..
-	mongoose.connect( keys.mongodb.db )
+	mongoose.connect( keys.mongodb.db );
 	mongoose.connection.on('connected',()=>{ console.log('connected to MongoDB') });
 	mongoose.connection.on('error',(err)=>{ console.log(err) });
 

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const messageSchema = new mongoose.Schema({
-  by: mongoose.Schema.Types.ObjectId,
-  to: mongoose.Schema.Types.ObjectId,
+  by: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+  to: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
   type: { type: String, default: "plain"} ,
   data: Date, // stores timestamp ..
   react: { type: String, default: null },

@@ -5,6 +5,10 @@
 const mongoose = require('mongoose');
 
 const User=mongoose.model('user');
+const Message=mongoose.model('Message');
+const Conversation=mongoose.model('Conversation');
+const Post=mongoose.model('post');
+const Comment =mongoose.model('comment');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
 
