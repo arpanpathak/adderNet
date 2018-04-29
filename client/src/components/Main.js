@@ -33,6 +33,7 @@ class Main extends Component {
   render() {
     return (
       <div >
+		<Route path='/music' component={() => window.location = 'http://127.0.0.1:8000/music'}/>
         <Route path="/profile" component={Profile} />
         <Route exact path="/" render={ ()=><Redirect to="/home" /> } />
         <Route path="/home" render={ ()=>(
@@ -41,6 +42,7 @@ class Main extends Component {
               <li><NavLink exact to="/home" >Home</NavLink></li>
               <li><NavLink exact to="/home/signup" >SignUp</NavLink></li>
               <li><NavLink exact to='/home/login'>LOGIN</NavLink></li>
+			  <li><NavLink exact to='/music'>Music</NavLink></li>
             </Navbar>
             
             <Switch style={{ overflow: 'auto'}}>

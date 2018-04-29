@@ -15,6 +15,11 @@ app.get('/', function(req, res, next) {
 app.post('/', function(req, res, next) {
  // Handle the post for this route
 });
+
+app.post('/music', (req, res) => {
+  console.log('test');
+  window.location.href='http://127.0.0.1:8000/music';
+});
 /* start the server */
 
 const port = 5000;

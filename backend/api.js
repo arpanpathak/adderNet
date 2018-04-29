@@ -79,7 +79,7 @@ module.exports = (app,passport) => {
 	app.get('/authFailed',(req,res)=>res.json({'error': 'authentication failed!'}));
 
 	// API to send OTP... currently using free twilio message service...
-	app.get('/sendOTP',(req,res)=> helpers.sendTwilioSms("+919099994016","apni vogoban dada, ei nin OTP="+helpers.RandomStringGenerate(6),
+	app.get('/sendOTP',(req,res)=> helpers.sendTwilioSms("+919099994016","apni vogoban dada, ei nin OTP ="+helpers.RandomStringGenerate(6),
 									(err)=> res.send(err?err:'sent') ) 
 			);
 	/*** =================================================================== ***/
@@ -97,6 +97,13 @@ module.exports = (app,passport) => {
 		req.logout();
 		req.user=null;
 		req.session.destroy( ()=> res.json({ message: 'logged out','status': 'logged out'}) );
+	});
+	
+	//implementing music api
+	app.get('/music',(req,res) => {
+		//res.json({authenticated: req.isAuthenticated(), 'usern': req.user.name });
+		res.json({usernm: "", userem: req.user.email });
+		//res.json({'email':req.user.email});
 	});
 
 	// google oauth API
