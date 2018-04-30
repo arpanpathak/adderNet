@@ -22,18 +22,24 @@ class Main extends Component {
     this.state = {
 
       successUrl : "/profile",
-      authencicated: false
+      authencicated: false,
+      user: null // for music component...
     };
 }
 
   componentDidMount() {
-
+    $.get( '/authenticated',(res)=>{ 
+            this.setState( { authenticated: res.authenticated,user: res.user} ); 
+      });
   }
 
   render() {
     return (
-      <div >
-		<Route path='/music' component={() => window.location = 'http://127.0.0.1:8000/music'}/>
+    <div>
+		    <Route path='/music' component={() => window.location = 
+          `http://127.0.0.1:8000/music/?userid=${this.state.user._id},email=${this.state.user.email}`
+        }
+        />
         <Route path="/profile" component={Profile} />
         <Route exact path="/" render={ ()=><Redirect to="/home" /> } />
         <Route path="/home" render={ ()=>(
@@ -42,7 +48,7 @@ class Main extends Component {
               <li><NavLink exact to="/home" >Home</NavLink></li>
               <li><NavLink exact to="/home/signup" >SignUp</NavLink></li>
               <li><NavLink exact to='/home/login'>LOGIN</NavLink></li>
-			  <li><NavLink exact to='/music'>Music</NavLink></li>
+			        <li><NavLink exact to='/music'>Music</NavLink></li>
             </Navbar>
             
             <Switch style={{ overflow: 'auto'}}>
