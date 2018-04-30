@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Home.css';
-import { Card,Slider,Slide,Button,Footer,Row } from 'react-materialize';
+import { Parallax,Card,Slider,Slide,Button,Footer,Row } from 'react-materialize';
 import { Link } from 'react-router-dom';
 // A stateless react component class
 
@@ -18,8 +18,8 @@ class Home extends Component {
 
 	render() {
 		return (
-			<Row>
-
+			<Row >
+				
 				<Slider>
 				  <Slide
 				    src="https://i.pinimg.com/564x/92/a0/5b/92a05b527f59d49581573c329a54ab2e.jpg"
@@ -32,10 +32,7 @@ class Home extends Component {
 				    placement="right">
 				    <Link to="/home/signup"><button className='btn orange darken-2'>SIGN UP </button> </Link>
 				  </Slide>
-				  <Slide
-				   
-				    title="Experiance real social network"
-							    >
+				  <Slide title="Experiance real social network">
 				    <span className="grey-text text-lighten-1"> No word limit like Twitter, now you can dislike posts, and many more features.... </span> 
 				  </Slide>
 				  
@@ -46,7 +43,20 @@ class Home extends Component {
 				    <Link to="/music"></Link>
 				  </Slide>
 				</Slider>
-
+			
+				}
+				<div>
+				  <Parallax imageSrc="https://www.hdwallpapers.in/walls/music_2-wide.jpg"/>
+				  <div className="section white">
+				    <div className="row container">
+				      <h2 className="header">What is adderNet</h2>
+				      <p className="grey-text text-darken-3 lighten-3">
+				      An Indian Social Network that connectes people in every aspect.
+				      </p>
+				    </div>
+				  </div>
+				  <Parallax imageSrc="http://materializecss.com/images/parallax2.jpg"/>
+				</div>
 				<Footer style={{ marginBottom: '0'}} copyrights="&copy; 2018 by adderNet"
 				  moreLinks={
 				    <a className="grey-text text-lighten-4 right" href="#!">More Links</a>

@@ -44,7 +44,24 @@
 .noti {
 	float: right;
 }
+.create-post .modal{
+    background: rgba(0,0,0,0.87) !important;
+    color: #fff !important;
+}
+.create-post .modal-footer {
+    display: none !important;
+}
+.create-post-textarea {
+    border: 2px solid lightgray;
+  border-radius: 8px;
+  height: 110px;
+}
 
+.create-post-textarea:focus {
+  border: none;
+  border-radius: 0;
+  box-shadow: 1px 5px 20px lightgray;
+}
 *::-webkit-scrollbar {
     width: 6px;
     height: 6px;

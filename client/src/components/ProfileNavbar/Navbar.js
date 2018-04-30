@@ -28,19 +28,21 @@ class Nav extends Component {
 
   render() {
     return ( 
-       <Navbar right className="profile-navbar navbar blue-grey darken-4" brand={<i className="btn-before fab fa-asymmetrik"></i>}>
-        <NavItem href='/profile/feed'><Icon>home</Icon></NavItem>
+       <Navbar left className="profile-navbar navbar blue-grey darken-4" brand={<i className="btn-before fab fa-asymmetrik"></i>}>
+        <NavItem href='/profile/feed'><div>news feed<Icon left>home</Icon></div></NavItem>
         <NavItem>
          <Messages />
         </NavItem>
-         <NavItem><div>Notifications<Icon right>notifications</Icon></div></NavItem>
-         <NavItem href='/profile/messenger' ><Icon>chat_bubble_outline</Icon></NavItem>
-         <NavItem href='javascript:void(0)' ><Icon>thumbs_up_down</Icon></NavItem> 
+         <NavItem><div>Notifications<Icon left>notifications</Icon></div></NavItem>
+         <NavItem href='/profile/messenger' ><div>messenger<Icon left>chat_bubble_outline</Icon></div></NavItem>
+         <NavItem href='javascript:void(0)' ><div>friend requests<Icon left>thumbs_up_down</Icon></div></NavItem> 
          <NavItem> 
           <CreatePost /> 
          </NavItem>
-         <NavItem href='/logout'><Icon>power_settings_new</Icon></NavItem> 
+         <NavItem href='javascript:void(0)' ><div>search<Icon left>search</Icon></div></NavItem> 
+         <NavItem><div>logout<Icon left>power_settings_new</Icon></div></NavItem> 
        </Navbar>
+       
     );
         
         

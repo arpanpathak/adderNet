@@ -11,27 +11,36 @@ class CreatePost extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      messages: [{from: 'testUser1'},{from: 'testUser2'},{from: 'testUser3'},{from: 'testUser1'},{from: 'testUser2'},{from: 'testUser3'}]
+      postContent: '',
+      image: '',
+      video: '',
     };
   }
   componentDidMount() { }
-
+  handleChange = (e) => {
+    this.setState( { [e.target.id]: e.target.value } );
+  }
+  create = (e) => {
+    $.post('/createPost', this.state,(res)=>{
+      alert(res._id);
+    })
+  }
   render(){
   	return(
   		<Modal
         header={ <div><Icon style={{ color: 'crimson' }}>create</Icon>Create Your Post</div>}
         bottomSheet fixedFooter
-        trigger={<span><Icon>create</Icon></span>} actions={
+        trigger={<div>create post<Icon left>create</Icon></div>} actions={
          <div>
-         <Button className='red' icon='create'>POST</Button>
+         <Button className='red' icon='create' onClick={ this.create }>POST</Button>
          <Button className='blue-gret darken-3' icon='videocam'></Button>
           <Button className='cyan darken-3' icon='image'></Button>
          </div>
-         }>
-        <div>
-         <Input type='textarea' />
+         } className='create-post'>
+        <Row>
+         <textarea className='create-post-textarea col-s-12' id='postContent' onChange={ this.handleChange }/>
          
-        </div>
+        </Row>
       </Modal>
   	);
   }

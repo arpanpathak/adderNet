@@ -3,7 +3,7 @@ import './Profile.css';
 
 // import './../../assets/css/style.css';
 import $ from 'jquery';
-import { Row,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,NavItem
+import { Row,Col,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,NavItem
          , Collapsible,CollapsibleItem ,Tabs, Tab} from 'react-materialize';
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
 import Nav from './../ProfileNavbar/Navbar';
@@ -47,7 +47,7 @@ class Profile extends Component {
            
            <div className="col s12 l10 row" style={{ height:'100%',position: 'fixed','left': '0',overflow: 'auto',padding: '10px 10px 10px 10px'}}>
               <Switch>
-               <Route exact path="/profile/feed" render={()=>(<div className='white z-depth-2' style={{ height: '100%'}}> 
+               <Route path="/profile/feed" render={()=>(<div className='white z-depth-2' style={{ height: '100%'}}> 
 
                 </div>)} />
                <Route exact path="/profile/messenger" component={Messenger} />
@@ -57,8 +57,19 @@ class Profile extends Component {
            <div className="col l2 hide-on-med-and-down z-depth-2" style={{ marginTop: '5px',position: 'fixed', 'height': '100%',right: '0',padding: '0' }}>
             
             <div className="people-container light-grey lighten-2" style={{ height: 'calc(100vh - 140px)', overflow: 'auto'}}>
-              <Collection header={<h6 className='blue-grey-text'>Online Users</h6> }>
-                <CollectionItem>friend1</CollectionItem>
+              <Row className='card blue-grey darken-3' style={{ marginTop: '-5px',padding: '5px 5px 5px 5px'}}>
+                <h6 className='white-text'>Online Users</h6>
+              </Row>
+              <Collection className='online-users'>
+                <CollectionItem  >
+                  <Row style={{ cursor: 'pointer '}} > 
+                  <Col s={12}  >
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="circle prefix-image"  />
+                  </Col>
+                  computerScienceGOD
+                  <span className="badge green-text">Online</span>
+                  </Row>
+                </CollectionItem>
                 <CollectionItem>friend1</CollectionItem>
                 <CollectionItem>friend1</CollectionItem>
                 <CollectionItem>friend1</CollectionItem>

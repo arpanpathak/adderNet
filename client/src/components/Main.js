@@ -44,7 +44,7 @@ class Main extends Component {
         <Route exact path="/" render={ ()=><Redirect to="/home" /> } />
         <Route path="/home" render={ ()=>(
             <div>
-            <Navbar brand={ <i className="fab fa-asymmetrik"></i>} left className="cyan darken-4 z-depth-1 navbar">
+            <Navbar fixed brand={ <i className="fab fa-asymmetrik"></i>} left className="cyan darken-4 z-depth-1 navbar">
               <li><NavLink exact to="/home" >Home</NavLink></li>
               <li><NavLink exact to="/home/signup" >SignUp</NavLink></li>
               <li><NavLink exact to='/home/login'>LOGIN</NavLink></li>

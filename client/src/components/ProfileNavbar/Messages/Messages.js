@@ -20,7 +20,7 @@ class Messages extends Component {
   	return(
   		<Modal
   		  header={ <div><Icon>message</Icon>Your Message</div>}
-  		  trigger={<span><Icon right>message</Icon><span className='hide-on-med-and-up'>Messages</span></span>}
+  		  trigger={<div>messages<Icon right>message</Icon></div>}
   		  fixedFooter
   		  style={{ overflow: 'auto' }}>
   		  <div>

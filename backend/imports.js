@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser'),
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 const keys = require('./config/keys.js');
-
+const socketIO = require('socket.io');
 
 module.exports = (app) => {
 
@@ -28,6 +28,7 @@ module.exports = (app) => {
 	app.use(session({
 	    secret: 'this is secret',
 	    name: 'user-session-cookie',
+	    cookie: { maxAge: null },
 	    store: new MongoStore({mongooseConnection : mongoose.connection}),
 	    proxy: true,
 	    resave: true,
@@ -37,4 +38,5 @@ module.exports = (app) => {
 
 	app.use(passport.initialize());
 	app.use(passport.session());
+
 }

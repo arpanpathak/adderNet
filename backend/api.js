@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 
 const User=mongoose.model('user');
+const Post=mongoose.model('post');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
 var prettyHtml = require('json-pretty-html').default; 
@@ -27,7 +28,7 @@ module.exports = (app,passport) => {
 	// an API to see whether the user is authenticated and authorized to view certain api or not...
 	app.get('/authenticated',(req,res) => {
 		// if user is authenticated then user will not be null in request object...
-		res.json({authenticated: req.isAuthenticated(), user: req.user });
+		res.json({authenticated: req.isAuthenticated(), user: req.user, maxAge: req.session.cookie.maxAge });
 	});
 
 	//User Registration API...
@@ -127,6 +128,30 @@ module.exports = (app,passport) => {
 	  (req,res)=> { req.session.save((err)=>res.send(helpers.json_to_html(req.user)) ) } 
 	);
 	/*** =================================================================== ***/
+
+	app.get('/allPost',(req,res)=> {
+		// Post.remove({},(err)=>{ res.send({fuck: true}) });
+		Post.find({}).then((posts)=>res.send(posts));
+	});
+	/*** main APIs ***/
+	app.post('/createPost',(req,res) => {
+		if(req.body.postContent.trim()=="")
+			res.send({error: 'post can not be empty'});
+		User.findById(req.user).
+			then((user)=>{
+			if(user) 
+				new Post({content: req.body.postContent, by: req.user._id})
+					.save((err,post)=>{
+					
+					user.posts.push(post._id);
+					user.save();
+					res.send( {'_id': post._id });
+			});
+			
+		});
+		
+	});
+	/*** ......................... **/
 
 	// Test API
 	//importing the unit test file....

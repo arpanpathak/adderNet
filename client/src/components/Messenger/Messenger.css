@@ -1,3 +1,6 @@
+*:focus{
+  outline: none !important;
+}
 .Messenger .input-field input[type=search] {
 	border-radius: 10px !important; 
 	border-bottom-left-radius: 0 !important;
@@ -87,3 +90,31 @@
     border-right: 20px solid transparent; 
     border-bottom: 40px solid red ; 
 }*/
+
+.messenger-message {
+  border: none;
+  box-shadow: 2px 2px 10px lightgray; 
+  border-radius: 8px;
+  height: 60px;
+}
+.prefix-image {
+  height: 45px !important;
+  width: 45px !important;
+}
+.messenger-message:focus {
+  border: none;
+  border-radius: 0;
+  box-shadow: 2px 2px 10px gray;
+}
+.spin {
+  transform: rotateZ(50deg);
+}
+.spin:hover {
+  transform: rotateZ(-50deg);
+}
+.messenger-online-users {
+  font-size: 7px !important;
+}
+.messenger-online-users .collection-header {
+  display: none !important;
+}

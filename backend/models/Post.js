@@ -9,6 +9,7 @@ const Comment = mongoose.model('comment',
 );
 
 const postSchema = new mongoose.Schema({
+	by: { type: mongoose.Schema.Types.ObjectId,ref: 'user' },
  	type: String,
  	date: { type: Date , default: Date.now },
  	content: String, // 
