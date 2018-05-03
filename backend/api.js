@@ -5,7 +5,9 @@ const User=mongoose.model('user');
 const Post=mongoose.model('post');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
-var prettyHtml = require('json-pretty-html').default; 
+const prettyHtml = require('json-pretty-html').default; 
+const multer  = require('multer');
+
 /* internal API */
  // this piece of code is moved to /lib/helpers.js file
 /* end of this section */
@@ -134,10 +136,10 @@ module.exports = (app,passport) => {
 		Post.find({}).then((posts)=>res.send(posts));
 	});
 	/*** main APIs ***/
-	app.post('/createPost',(req,res) => {
+	app.post('/main/createPost',(req,res) => {
 		if(req.body.postContent.trim()=="")
 			res.send({error: 'post can not be empty'});
-		User.findById(req.user).
+		User.findById(req.user._id).
 			then((user)=>{
 			if(user) 
 				new Post({content: req.body.postContent, by: req.user._id})
@@ -151,8 +153,20 @@ module.exports = (app,passport) => {
 		});
 		
 	});
-	/*** ......................... **/
+	app.get('/main/getAllPost',(req,res) => {
+		User.findById(req.user._id).populate('posts').
+			then((user)=>{
+			if(user) 
+				res.send(user.posts);
+			});
+			
+	});
 
+	app.get('/main/upload',(req,res) => {
+
+	});
+		
+	/*** ......................... **/
 	// Test API
 	//importing the unit test file....
 	require('./tests.js')(app); 

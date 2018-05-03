@@ -12,6 +12,8 @@ import ReactLoading from 'react-loading';
 /*** import your components here ***/
 import Messenger from './../Messenger/Messenger';
 import Error404 from './../404/404';
+import Timeline from './../Timeline/Timeline';
+
 const Loading = ({ type, color }) => (
     <div style={{paddingTop: 'calc(50vh - 100px)', marginLeft: 'calc(50% - 100px)'}}>
     <ReactLoading type={type} color={color} height={'200px'} width={'200px'} delay={0}/>
@@ -51,6 +53,7 @@ class Profile extends Component {
 
                 </div>)} />
                <Route exact path="/profile/messenger" component={Messenger} />
+               <Route exact path="/profile/timeline" component={()=><Timeline user={this.state.user} />} />
                <Route component={Error404} />
               </Switch>
            </div>

@@ -39,6 +39,7 @@ class Nav extends Component {
          <NavItem> 
           <CreatePost /> 
          </NavItem>
+         <NavItem href='/profile/timeline'><div>my posts<Icon left>home</Icon></div></NavItem>
          <NavItem href='javascript:void(0)' ><div>search<Icon left>search</Icon></div></NavItem> 
          <NavItem><div>logout<Icon left>power_settings_new</Icon></div></NavItem> 
        </Navbar>

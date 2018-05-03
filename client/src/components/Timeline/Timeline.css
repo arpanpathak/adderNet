@@ -1,0 +1,32 @@
+.Timeline {
+
+}
+.timeline-post {
+    word-wrap: break-word !important;
+    position: relative !important; 
+    background: #1D3C50;
+    color: #fff;
+    margin: 10px 10px 10px 10px !important;
+    padding: 20px 20px 20px 20px !important;
+    border-radius: 5px;
+
+}
+.timeline-post:before {
+    content:"";
+    width: 0; 
+    height: 0; 
+    position: absolute;
+    top: calc(50% - 13px);
+    left: -20px;
+    border-top: 10px solid transparent;
+    border-bottom: 20px solid transparent; 
+    border-right: 20px solid #1D3C50; 
+}
+.small-dp {
+    height: 50px;
+    width: 50px;
+    border-radius: 50px;
+}
+.med-chip {
+    height: 40px !important;
+}

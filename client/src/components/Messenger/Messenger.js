@@ -30,8 +30,10 @@ class Messenger extends Component {
   sendMessage = (e) => {
     alert(this.state.userMessage);
   }
-  userSelected = (e) => {
-    console.log(e.target.id);
+  userSelected = (id,i,e) => {
+    $('.user-found').removeClass('active');
+    this.setState({to: id});
+    $('.user-found').eq(i).addClass('active');
   }
   render(){ 
   	return(
@@ -44,7 +46,7 @@ class Messenger extends Component {
  				<div className="people-container grey lighten-3 col s12" style={{ marginTop: '-12px',height: 'calc(100vh - 170px)', overflow: 'scroll'}}>
  				<Collection>
  					{ this.state.friends.map((friend,i)=> 
-            <CollectionItem key={`friend${i}`} onClick={ this.userSelected} className='user-found' id={friend._id}>
+            <CollectionItem key={`friend${i}`} onClick={ this.userSelected.bind(this,friend._id,i) } className='user-found' data-id={friend._id}>
               <Row style={{ cursor: 'pointer '}} > 
               <Col s={2}  >
               <img src="https://image.flaticon.com/icons/png/512/23/23228.png" alt="none" className="circle responsive-img" />
@@ -53,7 +55,7 @@ class Messenger extends Component {
               </Row>
             </CollectionItem>)
           }
-          <CollectionItem >
+          <CollectionItem className='user-found' onClick={ this.userSelected.bind(this,"fuck1",2) }>
             <Row style={{ cursor: 'pointer '}} > 
             <Col s={2}  >
             <img src="https://image.flaticon.com/icons/png/512/23/23228.png" alt="none" className="circle responsive-img" />
@@ -62,10 +64,10 @@ class Messenger extends Component {
             <span className="badge green-text">Online</span>
             </Row>
           </CollectionItem>
-          <CollectionItem className='active'>
+          <CollectionItem className='user-found active' onClick={ this.userSelected.bind(this,"dijkstra",3) }>
             <Row style={{ cursor: 'pointer '}} > 
             <Col s={2}  >
-            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="circle responsive-img" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="small-dp" />
             </Col>
             <Col s={10}>
             computerScienceGOD
@@ -99,7 +101,7 @@ class Messenger extends Component {
           <div className='card messenger-message-from'>
             <Row> 
             <Col s={3}  >
-            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="circle responsive-img" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="small-dp" />
             <span className='chip' style={{ background: '#333', color: '#fff' }}> username
             <br />
             date

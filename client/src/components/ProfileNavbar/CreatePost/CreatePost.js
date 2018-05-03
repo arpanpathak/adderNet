@@ -21,9 +21,13 @@ class CreatePost extends Component {
     this.setState( { [e.target.id]: e.target.value } );
   }
   create = (e) => {
-    $.post('/createPost', this.state,(res)=>{
+    $.post('/main/createPost', this.state,(res)=>{
       alert(res._id);
     })
+  }
+  handleImageUpload = (e) => {
+    let fileSize= e[0].size/(1024*1024);
+    alert(`File Size = ${fileSize}MB`);
   }
   render(){
   	return(
@@ -33,8 +37,9 @@ class CreatePost extends Component {
         trigger={<div>create post<Icon left>create</Icon></div>} actions={
          <div>
          <Button className='red' icon='create' onClick={ this.create }>POST</Button>
-         <Button className='blue-gret darken-3' icon='videocam'></Button>
-          <Button className='cyan darken-3' icon='image'></Button>
+         <Button className='blue-gret darken-3' icon='videocam'>upload video</Button>
+         <input type='file' style={{ display: 'none'}} id='image-upload-btn' accept="image" onChange={ (e) => this.handleImageUpload(e.target.files) }/>
+         <Button className='cyan darken-3' icon='image' onClick={(e)=>$('#image-upload-btn').click() } >upload image</Button>
          </div>
          } className='create-post'>
         <Row>
