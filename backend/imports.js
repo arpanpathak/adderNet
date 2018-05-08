@@ -18,6 +18,7 @@ module.exports = (app) => {
 	const passport = require('./config/passport-setup.js');
 
 	app.use( bodyParser.urlencoded({ extended: true} ) );
+	app.use(bodyParser.json());
 	app.use(cookieParser());
 	// database connection..
 	mongoose.connect( keys.mongodb.db );

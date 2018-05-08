@@ -20,10 +20,32 @@ class CreatePost extends Component {
   handleChange = (e) => {
     this.setState( { [e.target.id]: e.target.value } );
   }
+  setImage = (e) => { 
+    this.setState({image: e.target.files[0]});
+  }
   create = (e) => {
-    $.post('/main/createPost', this.state,(res)=>{
-      alert(res._id);
-    })
+    // $.post('/main/createPost', this.state,(res)=>{
+    //   alert(res._id);
+    // });
+    $(e.target).attr('disabled','disabled');
+    var data=new FormData();
+    data.append('postContent',this.state.postContent);
+    data.append('image',this.state.image,'image');
+    console.log(data);
+    $.ajax({
+               type: "POST",
+               contentType: false,
+               url: "/main/createPost",
+               data: data,
+               processData: false,
+               cache: false,
+               timeout: 600000,
+               success:  (res) =>{
+                  console.log(res);
+               },
+               error: (e) => alert(e.responseText)
+           });
+    // $(e.target).removeAttr('disabled','disabled');
   }
   handleImageUpload = (e) => {
     let fileSize= e[0].size/(1024*1024);
@@ -34,17 +56,18 @@ class CreatePost extends Component {
   		<Modal
         header={ <div><Icon style={{ color: 'crimson' }}>create</Icon>Create Your Post</div>}
         bottomSheet fixedFooter
-        trigger={<div>create post<Icon left>create</Icon></div>} actions={
-         <div>
-         <Button className='red' icon='create' onClick={ this.create }>POST</Button>
-         <Button className='blue-gret darken-3' icon='videocam'>upload video</Button>
-         <input type='file' style={{ display: 'none'}} id='image-upload-btn' accept="image" onChange={ (e) => this.handleImageUpload(e.target.files) }/>
-         <Button className='cyan darken-3' icon='image' onClick={(e)=>$('#image-upload-btn').click() } >upload image</Button>
-         </div>
-         } className='create-post'>
+        actions={<div> 
+          <Button type='button' className='red col-s-4' icon='create' onClick={ this.create }>POST</Button>
+          <Button type='button' className='blue-gret darken-3 col-s-4' icon='videocam'>upload video</Button>
+          <input type='file' name='image-file' style={{ display: 'none'}} id='image-upload-btn' accept="image" onChange={ this.setImage }/>
+          <Button type='button' className='cyan darken-3 col-s-4' icon='image' onClick={(e)=>$('#image-upload-btn').click() } >upload image</Button>
+        </div>}
+        trigger={<div>create post<Icon left>create</Icon></div>} className='create-post'>
         <Row>
-         <textarea className='create-post-textarea col-s-12' id='postContent' onChange={ this.handleChange }/>
          
+         <div>
+           <textarea name='postContent' className='create-post-textarea col-s-12' id='postContent' onChange={ this.handleChange }/>
+         </div>
         </Row>
       </Modal>
   	);

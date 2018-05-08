@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const User=mongoose.model('user');
 const Post=mongoose.model('post');
+const Conversation=mongoose.model('Conversation');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
 const prettyHtml = require('json-pretty-html').default; 
@@ -161,6 +162,20 @@ module.exports = (app,passport) => {
 			});
 			
 	});
+	app.post('/main/deletePost',(req,res) => {
+		Post.findByIdAndRemove(req.body._id,()=> {
+			User.findById(req.user.id).then((user)=>user.posts.pull({_id: req.body._id}));
+			res.send({deleted: 'true'}) 
+		});
+	});
+	app.get('/main/getAllMessages',(req,res) => {
+		User.findById(req.body._id).populate('messages').then((messages)=>{ res.send(messages)});
+	});
+
+	app.get('/main/getConversation',(req,res) => {
+		Conversation.findById(req.body._id).then((conversation)=>{ res.send(conversation)});
+	});
+
 
 	app.get('/main/upload',(req,res) => {
 

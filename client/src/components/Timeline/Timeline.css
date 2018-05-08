@@ -1,6 +1,7 @@
 .Timeline {
 
 }
+
 .timeline-post {
     word-wrap: break-word !important;
     position: relative !important; 
@@ -29,4 +30,22 @@
 }
 .med-chip {
     height: 40px !important;
+}
+
+.ui-button {
+    margin: 5px 5px 5px 5px !important;
+}
+.comment-textarea {
+    color: #fff;
+    border-radius: 6px;
+    height: 45px;
+    padding: 10px 50px 10px 10px;
+    transition: 0.6s all ease-out ;
+}
+
+.comment-textarea:focus {
+
+    height: 110px;
+    background: #fff;
+
 }

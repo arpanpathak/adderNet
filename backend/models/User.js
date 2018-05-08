@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
   shares: [ {type: mongoose.Schema.Types.ObjectId, ref: 'post'} ],
   messages: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
-  notification: [ {} ],
+  notification: [ {type: mongoose.Schema.Types.ObjectId, ref: 'Notification'} ],
 });
 
 mongoose.model('user',userSchema);

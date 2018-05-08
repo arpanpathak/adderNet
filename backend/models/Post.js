@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const Comment = mongoose.model('comment',
 	  new mongoose.Schema({
 	  	content: String,
+	  	image: String,
+	  	video: String,
+	  	audio: String,
 	  	from: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
 	  	reacts: [{type: String, by: { type: mongoose.Schema.Types.ObjectId } }]
 	  })
