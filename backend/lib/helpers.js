@@ -109,6 +109,19 @@ helpers.RandomStringGenerate = (strLength)=>{
   }
 };
 
+//Sanitizing
+helpers.sanitize = (req, file, cb) => {
+  const fileTypes = /jpeg|jpg|png|gif/;
+  const extname = fileTypes.test(path.extname(file.originalname));
+  const mimetype = fileTypes.test(file.mimetype);
+  if(mimetype && extname){
+    return cb(null, true);
+  }
+  else{
+    cb('Error: Images Only!!');
+  }
+};
+
 // inline styling for JSON.. 
 const style="<style> body{font-family:Menlo,Monaco,Courier New,monospace;font-weight:400;font-size:14px;line-height:16px;letter-spacing:0;background-color:#24282A;color:#d4d4d4;text-align:left;border-top:1px solid #121516;padding-top:10px;padding-bottom:10px;margin:0}.json-pretty{padding-left:30px;padding-right:30px}.json-selected{background-color:rgba(139,191,228,.19999999999999996)}.json-string{color:#6caedd}.json-key{color:#ec5f67}.json-boolean,.json-number{color:#99c794}</style>";
   // beautify json response..
