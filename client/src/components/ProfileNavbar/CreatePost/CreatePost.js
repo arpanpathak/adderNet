@@ -62,8 +62,8 @@ class CreatePost extends Component {
         bottomSheet fixedFooter
         actions={<div> 
           <Button type='button' className='red col-s-4' icon='create' onClick={ this.create }>POST</Button>
-          <input type='file' name='image-file' style={{ display: 'none'}} id='image-upload-btn' accept="image/*" onChange={ this.setImage }/>
-          <input type='file' name='video-file' style={{ display: 'none'}} id='video-upload-btn' accept="video/*" onChange={ this.setVideo }/>
+          <input type='file' name='image-file' style={{ display: 'none'}} id='image-upload-btn'  onChange={ this.setImage }/>
+          <input type='file' name='video-file' style={{ display: 'none'}} id='video-upload-btn'  onChange={ this.setVideo }/>
           <Button type='button' className='cyan darken-3 col-s-4' icon='image' onClick={(e)=>$('#image-upload-btn').click() } >upload image</Button>
           <Button type='button' className='blue-gret darken-3 col-s-4' icon='videocam' onClick={(e)=>$('#video-upload-btn').click()}>upload video</Button>
         </div>}

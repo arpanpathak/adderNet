@@ -8,6 +8,7 @@ const app = express(),
       path=require('path');
 const cors = require('cors');
 const helpers = require('./lib/helpers');
+
 // allowing ajax request...
 app.use(cors({origin: '*'}));
 
@@ -51,7 +52,15 @@ const upload = multer({
 /** end of section **/
 const port = 5000;
 
-app.listen(port, () => {
+const server=app.listen(port, () => {
 		console.log(`Server running on port ${port}`);
 				  
+});
+
+// socket.io setup.. 
+const socket = require('socket.io'),
+io = socket(server);
+
+io.on('connection', (socket) => {
+    console.log("Someone connected", socket.id);
 });

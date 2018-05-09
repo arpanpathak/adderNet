@@ -14,7 +14,9 @@ class Messages extends Component {
       messages: [{from: 'testUser1'},{from: 'testUser2'},{from: 'testUser3'},{from: 'testUser1'},{from: 'testUser2'},{from: 'testUser3'}]
     };
   }
-  componentDidMount() { }
+  componentDidMount() { 
+    $()
+  }
 
   render(){
   	return(
@@ -25,7 +27,10 @@ class Messages extends Component {
   		  style={{ overflow: 'auto' }}>
   		  <div>
   		   {
-  		    this.state.messages.map((msg,i)=><div key={`profile-message${i}`} className='card profile-message'>This is message{ msg.from}</div>)
+  		    this.state.messages.map((msg,i)=>
+            <div key={`profile-message${i}`} className='card profile-message'>
+              This is message { msg.from }
+            </div>)
   		   }
   		  </div>
   		</Modal>

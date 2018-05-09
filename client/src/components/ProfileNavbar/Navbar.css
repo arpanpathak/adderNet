@@ -42,3 +42,44 @@
 	width: 100px !important;
 	border-radius: 8px !important;
 }
+.userView .background {
+	
+}
+.tab a{
+	color: #333 !important;
+}
+.tab .active {
+	border: none !important;
+	box-shadow: 0 0 0 0 !important;
+	color: #fff !important;
+}
+
+.indicator {
+	background: black !important;
+}
+
+.side-nav 
+{
+	/*background: rgba(0,0,0,0.87) !important;*/
+	background: linear-gradient(#333, black, #333,rgba(0,0,0,0.9),rgba(0,0,0,0.9),black,#333,black,black) !important;
+	box-shadow: 5px 0 2px black !important;
+}
+
+.side-nav li {
+	position: relative;
+	display: block !important;
+	padding: 0 0 0 0 !important;
+	text-align: left !important;
+}
+.side-nav li:hover {
+	background: crimson;
+}
+.side-nav li a {
+	color: #fff !important;
+}
+.side-nav i {
+	position: absolute !important;
+	right: 5px !important;
+	top: 0 !important;
+	margin: 0 0 0 0 !important;
+}

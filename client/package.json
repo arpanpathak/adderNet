@@ -10,7 +10,8 @@
     "react-loading": "^1.0.4",
     "react-materialize": "*",
     "react-router-dom": "*",
-    "react-scripts": "*"
+    "react-scripts": "*",
+    "socket.io-client": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

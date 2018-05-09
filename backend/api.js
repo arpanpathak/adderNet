@@ -148,7 +148,11 @@ module.exports = (app,passport) => {
 	/*** user info API ***/
 	app.post('/user/changeDp',upload.fields([{name: 'image',maxCount:1}]),(req,res)=>{
 		User.findByIdAndUpdate( req.user._id, { profilePic: req.files['image'][0].filename.toString() }).
-		then((user)=>res.send( { 'changed': true} ));
+		then((user)=>res.send( { 'changed': true,profilePic: req.files['image'][0].filename.toString()} ));
+	});
+	app.post('/user/changeCoverPic',upload.fields([{name: 'image',maxCount:1}]),(req,res)=>{
+		User.findByIdAndUpdate( req.user._id, { coverPic: req.files['image'][0].filename.toString() }).
+		then((user)=>res.send( { 'changed': true,coverPic: req.files['image'][0].filename.toString()} ));
 	});
 	/*** end of this section ***/
 
@@ -181,10 +185,23 @@ module.exports = (app,passport) => {
 		
 	});
 	app.get('/main/getAllPost',(req,res) => {
-		User.findById(req.user._id).populate( { path: 'posts',populate:  { path: 'comments',
-		 populate: {path: 'by', select: 'name profilePic'} }
+		User.findById(req.user._id).populate( [
+		 { path: 'posts',
+		   populate:  { 
+		   		path: 'comments',
+		 		populate: {path: 'by', select: 'name profilePic'} 
+		 	}
 
-		 }).
+		 },
+		 { path: 'posts',
+		   populate:  { 
+		   		path: 'by',
+		 		select: 'name profilePic'
+		 	}
+
+		 },
+
+		 ]).
 
 			then((user)=>{
 			if(user) 
@@ -192,6 +209,67 @@ module.exports = (app,passport) => {
 			});
 			
 	});
+	app.post('/main/getAllSharesById',(req,res) => {
+		User.findById(req.body._id).populate( [
+		 { path: 'shares',
+		   populate:  { 
+		   		path: 'comments',
+		 		populate: {path: 'by', select: 'name profilePic'} 
+		 	}
+
+		 },
+		 { path: 'shares',
+		   populate:  { 
+		   		path: 'by',
+		 		select: 'name profilePic'
+		 	}
+
+		 },
+
+		 ]).
+
+			then((user)=>{
+			if(user) 
+				res.send(user.shares);
+			});
+			
+	});
+	app.post('/main/getAllPostById',(req,res) => {
+		console.log('hola',req.body._id);
+		User.findById(req.body._id).populate( [
+		 { path: 'posts',
+		   populate:  { 
+		   		path: 'comments',
+		 		populate: {path: 'by', select: 'name profilePic'} 
+		 	}
+
+		 },
+		 { path: 'posts',
+		   populate:  { 
+		   		path: 'by',
+		 		select: 'name profilePic'
+		 	}
+
+		 },
+
+		 ]).
+
+			then((user)=>{
+			if(user) 
+				res.send(user.posts);
+			});
+			
+	});
+	app.post('/main/sharePost',(req,res)=>{
+		User.findById(req.user._id).then((user)=>{
+			user.shares.push(req.body._id);
+			user.save();
+			Post.findById(req.body._id).then((post)=>{
+				post.shared_by.push(req.user._id);
+				post.save().then(res.send( { 'shared': true}));
+			});
+		});
+	})
 	app.post('/main/addComment',(req,res)=>{
 		Post.findById(req.body._id).then((post)=>{
 
@@ -230,6 +308,10 @@ module.exports = (app,passport) => {
 		Post.findByIdAndUpdate(req.body._id,{content: req.body.content})
 			.then(res.send({updated: 'true'}));
 	});
+	app.post('/main/updatePost',(req,res) => {
+		Post.findByIdAndUpdate(req.body._id,{content: req.body.content})
+			.then(res.send({updated: 'true'}));
+	});
 	app.post('/main/deletePost',(req,res) => {
 		Post.findByIdAndRemove(req.body._id,()=> {
 			User.findById(req.user._id).then((user)=>{ user.posts.pull({_id: req.body._id}) 
@@ -261,5 +343,6 @@ module.exports = (app,passport) => {
 	//importing the unit test file....
 
 	app.get('/currentUser',(req,res)=> User.findById(req.user._id).then((user)=>res.send(user)));
+	app.post('/getUserById',(req,res)=> User.findById(req.body._id).then((user)=>res.send(user)));
 	require('./tests.js')(app); 
 }

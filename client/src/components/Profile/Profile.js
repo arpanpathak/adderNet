@@ -8,10 +8,12 @@ import { Row,Col,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,N
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
 import Nav from './../ProfileNavbar/Navbar';
 import ReactLoading from 'react-loading';
+import io from "socket.io-client";
 
 /*** import your components here ***/
 import Messenger from './../Messenger/Messenger';
 import Error404 from './../404/404';
+import MyPosts from './../MyPosts/MyPosts';
 import Timeline from './../Timeline/Timeline';
 
 const Loading = ({ type, color }) => (
@@ -28,9 +30,11 @@ class Profile extends Component {
       user: null,
       loading: true,
     };
+    this.socket = io('localhost:5000');
   }
 
   componentDidMount() {
+
     $.ajaxSetup({ cache: false });
     $.get( '/authenticated',(res)=>{ 
             this.setState( { authenticated: res.authenticated,user: res.user,loading:false} ); 
@@ -54,8 +58,11 @@ class Profile extends Component {
                <Route path="/profile/feed" render={()=>(<div className='white z-depth-2' style={{ height: '100%'}}> 
 
                 </div>)} />
-               <Route exact path="/profile/messenger" component={Messenger} />
-               <Route exact path="/profile/timeline" component={()=><Timeline user={this.state.user} />} />
+               <Route exact path="/profile/messenger" component={Messenger} socket={this.socket} />
+               <Route exact path="/profile/myposts" component={()=><MyPosts user={this.state.user} />} />
+               <Route exact path="/profile/timeline/:id?" component={()=><Timeline user={this.state.user}
+                socket={this.socket } /> } />
+               <Route path="/profile/user" component={()=><div> </div>} />
                <Route component={Error404} />
               </Switch>
            </div>
