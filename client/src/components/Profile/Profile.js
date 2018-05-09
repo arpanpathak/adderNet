@@ -31,8 +31,10 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    $.ajaxSetup({ cache: false });
     $.get( '/authenticated',(res)=>{ 
             this.setState( { authenticated: res.authenticated,user: res.user,loading:false} ); 
+            console.log(this.state);
           });
   }
 

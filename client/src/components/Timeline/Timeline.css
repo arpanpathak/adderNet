@@ -34,18 +34,58 @@
 
 .ui-button {
     margin: 5px 5px 5px 5px !important;
+    border-radius: 20px !important;
+    width: 50px !important;
+    overflow: hidden !important;
+}
+.ui-button:hover {
+    width: 200px !important;
 }
 .comment-textarea {
-    color: #fff;
+    background: #fff;
+    color: black !important;
     border-radius: 6px;
     height: 45px;
-    padding: 10px 50px 10px 10px;
+    padding: 10px 10px 10px 60px;
     transition: 0.6s all ease-out ;
 }
 
 .comment-textarea:focus {
 
     height: 110px;
-    background: #fff;
+    
+}
+.comment-section {
+    overflow-x: hidden !important;
+}
+.comment-section::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
 
+.comment-section::-webkit-scrollbar-track {
+    background: #333;
+    
+   
+}
+
+.comment-section::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 0;
+    -webkit-box-shadow: inset 1px 1px 6px rgba(0,0,0,0.5); 
+}
+.comment {
+    background: transparent !important;
+    border-left: 5px double #fff !important;
+}
+.comment:before{
+    content:"";
+    width: 0; 
+    height: 0; 
+    position: absolute;
+    top: 0;
+    left: -20px;
+    border-top: 1px solid transparent;
+    border-bottom: 20px solid transparent; 
+    border-right: 20px solid #fff; 
 }

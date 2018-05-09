@@ -3,11 +3,23 @@ const mongoose = require('mongoose');
 
 const User=mongoose.model('user');
 const Post=mongoose.model('post');
+const Comment=mongoose.model('comment');
 const Conversation=mongoose.model('Conversation');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
 const prettyHtml = require('json-pretty-html').default; 
 const multer  = require('multer');
+const path = require('path');
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+  	console.log(file.originalname);
+    cb(null, Date.now() + "."+file.mimetype.split("/")[1]) //Appending extension
+  }
+})
+let upload = multer({ storage: storage });
 
 /* internal API */
  // this piece of code is moved to /lib/helpers.js file
@@ -93,16 +105,17 @@ module.exports = (app,passport) => {
 	// EmailOTP will be added after implementing sendEmail( ) helper function...
 	app.post('/login',passport.authenticate(['email-local','phone-local'],{failureRedirect: '/authFailed' }),
 	  (req,res) => {
-	  	console.log(req);
 		res.json( {'loggedin' : true } );
 	});
 	// logout api
 	app.get('/logout',(req,res) => {
+		req.session.destroy();
 		req.logout();
-		req.user=null;
-		req.session.destroy( ()=> res.json({ message: 'logged out','status': 'logged out'}) );
+		
+		res.json({ message: 'logged out','status': 'logged out'}) ;
 	});
 	
+
 	//implementing music api
 	app.get('/music',(req,res) => {
 		//res.json({authenticated: req.isAuthenticated(), 'usern': req.user.name });
@@ -132,18 +145,31 @@ module.exports = (app,passport) => {
 	);
 	/*** =================================================================== ***/
 
+	/*** user info API ***/
+	app.post('/user/changeDp',upload.fields([{name: 'image',maxCount:1}]),(req,res)=>{
+		User.findByIdAndUpdate( req.user._id, { profilePic: req.files['image'][0].filename.toString() }).
+		then((user)=>res.send( { 'changed': true} ));
+	});
+	/*** end of this section ***/
+
+	/*** user post APIs ***/
 	app.get('/allPost',(req,res)=> {
 		// Post.remove({},(err)=>{ res.send({fuck: true}) });
 		Post.find({}).then((posts)=>res.send(posts));
 	});
 	/*** main APIs ***/
-	app.post('/main/createPost',(req,res) => {
+	app.post('/main/createPost',upload.fields([{name: 'image',maxCount:1},{name: 'video',maxCount: 1}]),
+	  (req,res) => {
+		console.log(req.files);
+		console.log(req.body);
 		if(req.body.postContent.trim()=="")
 			res.send({error: 'post can not be empty'});
 		User.findById(req.user._id).
 			then((user)=>{
 			if(user) 
-				new Post({content: req.body.postContent, by: req.user._id})
+				new Post({content: req.body.postContent, by: req.user._id, 
+					image: req.files['image']?req.files['image'][0].filename.toString() : "",
+					video: req.files['video']?req.files['video'][0].filename.toString() : "" })
 					.save((err,post)=>{
 					
 					user.posts.push(post._id);
@@ -155,19 +181,68 @@ module.exports = (app,passport) => {
 		
 	});
 	app.get('/main/getAllPost',(req,res) => {
-		User.findById(req.user._id).populate('posts').
+		User.findById(req.user._id).populate( { path: 'posts',populate:  { path: 'comments',
+		 populate: {path: 'by', select: 'name profilePic'} }
+
+		 }).
+
 			then((user)=>{
 			if(user) 
 				res.send(user.posts);
 			});
 			
 	});
-	app.post('/main/deletePost',(req,res) => {
-		Post.findByIdAndRemove(req.body._id,()=> {
-			User.findById(req.user.id).then((user)=>user.posts.pull({_id: req.body._id}));
-			res.send({deleted: 'true'}) 
+	app.post('/main/addComment',(req,res)=>{
+		Post.findById(req.body._id).then((post)=>{
+
+			var comment = new Comment({postId: req.body.id,content: req.body.content, by: req.user._id});
+			new Comment({content: req.body.content, by: req.user._id})
+				.save((err,comment)=>{
+				
+				post.comments.push(comment._id);
+				post.save().then(()=>
+				res.send({added: true, content: comment.content, by: req.user.name})
+				);
+			});
+			
 		});
 	});
+	app.post('/main/addLike',(req,res)=>{
+		Post.findById(req.body._id).then((post)=>{
+			post.likes.push(req.user._id);
+			post.save().then(()=>res.send({added: 'added'}));
+		})
+	});
+	app.post('/main/addDislike',(req,res)=>{
+		Post.findById(req.body._id).then((post)=>{
+			post.dislikes.push(req.user._id);
+			post.save().then(()=>res.send({added: 'added'}));
+		})
+	});
+	app.post('/main/sharePost',(req,res)=>{
+		User.findById(req.user._id).then((user)=>{
+			user.shares.push(req._id);
+			post.save().then(()=>res.send({added: 'added'}));
+		})
+	});
+	
+	app.post('/main/updatePost',(req,res) => {
+		Post.findByIdAndUpdate(req.body._id,{content: req.body.content})
+			.then(res.send({updated: 'true'}));
+	});
+	app.post('/main/deletePost',(req,res) => {
+		Post.findByIdAndRemove(req.body._id,()=> {
+			User.findById(req.user._id).then((user)=>{ user.posts.pull({_id: req.body._id}) 
+				user.save();
+				Comment.remove({postId: req.body._id});
+				res.send({deleted: 'true'}) 
+			});
+			
+		});
+	});
+	/** ================================================================ **/
+	/** end of this section **/
+
 	app.get('/main/getAllMessages',(req,res) => {
 		User.findById(req.body._id).populate('messages').then((messages)=>{ res.send(messages)});
 	});
@@ -184,5 +259,7 @@ module.exports = (app,passport) => {
 	/*** ......................... **/
 	// Test API
 	//importing the unit test file....
+
+	app.get('/currentUser',(req,res)=> User.findById(req.user._id).then((user)=>res.send(user)));
 	require('./tests.js')(app); 
 }

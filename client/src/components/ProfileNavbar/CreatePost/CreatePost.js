@@ -23,6 +23,9 @@ class CreatePost extends Component {
   setImage = (e) => { 
     this.setState({image: e.target.files[0]});
   }
+  setVideo = (e) => { 
+    this.setState({video: e.target.files[0]});
+  }
   create = (e) => {
     // $.post('/main/createPost', this.state,(res)=>{
     //   alert(res._id);
@@ -31,6 +34,7 @@ class CreatePost extends Component {
     var data=new FormData();
     data.append('postContent',this.state.postContent);
     data.append('image',this.state.image,'image');
+    data.append('video',this.state.video,'video');
     console.log(data);
     $.ajax({
                type: "POST",
@@ -41,7 +45,7 @@ class CreatePost extends Component {
                cache: false,
                timeout: 600000,
                success:  (res) =>{
-                  console.log(res);
+                  alert("Post added, post id="+res._id);
                },
                error: (e) => alert(e.responseText)
            });
@@ -58,9 +62,10 @@ class CreatePost extends Component {
         bottomSheet fixedFooter
         actions={<div> 
           <Button type='button' className='red col-s-4' icon='create' onClick={ this.create }>POST</Button>
-          <Button type='button' className='blue-gret darken-3 col-s-4' icon='videocam'>upload video</Button>
-          <input type='file' name='image-file' style={{ display: 'none'}} id='image-upload-btn' accept="image" onChange={ this.setImage }/>
+          <input type='file' name='image-file' style={{ display: 'none'}} id='image-upload-btn' accept="image/*" onChange={ this.setImage }/>
+          <input type='file' name='video-file' style={{ display: 'none'}} id='video-upload-btn' accept="video/*" onChange={ this.setVideo }/>
           <Button type='button' className='cyan darken-3 col-s-4' icon='image' onClick={(e)=>$('#image-upload-btn').click() } >upload image</Button>
+          <Button type='button' className='blue-gret darken-3 col-s-4' icon='videocam' onClick={(e)=>$('#video-upload-btn').click()}>upload video</Button>
         </div>}
         trigger={<div>create post<Icon left>create</Icon></div>} className='create-post'>
         <Row>

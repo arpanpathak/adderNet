@@ -37,3 +37,8 @@
 	top: 0 !important;
 	margin: 0 0 0 0 !important;
 }
+.big-dp{
+	height: 100px !important;
+	width: 100px !important;
+	border-radius: 8px !important;
+}

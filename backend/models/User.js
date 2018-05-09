@@ -15,8 +15,8 @@ const userSchema = new mongoose.Schema({
   // personal information....
   name: String,
   gender: String,
-  profilePic: String, // static url of profile pic
-  coverPic: String,  // static url of cover pic,
+  profilePic: { type: String, default: ""}, // static url of profile pic
+  coverPic: { type: String,default: "" },  // static url of cover pic,
 
   // social information ....
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user'}],

@@ -3,56 +3,149 @@
 import React, { Component } from 'react';
 import "./Timeline.css"; // import your css file for this component
 import $ from 'jquery';
-import { Row,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,NavItem
+import { Col,Row,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,NavItem
          , Collapsible,CollapsibleItem ,Tabs, Tab,Card,CardTitle} from 'react-materialize';
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
-
+const url="http://192.168.0.100:5000/uploads/";
 class Post extends Component {
 	constructor(props) {
 	  super(props);
-	  this.state = { editable: this.props.editable };
+	  this.state = { 
+		  	_id: this.props.post._id,
+		  	editable: this.props.editable, 
+		  	content: this.props.post.content,
+		  	likes: this.props.post.likes.length,
+		    dislikes: this.props.post.dislikes.length , 
+		    comments: this.props.post.comments,
+		    commentText: "",
+		    hidden: false,
+		    liked: this.props.post.likes.indexOf(this.props.user._id) !==-1,
+		    disliked: this.props.post.dislikes.indexOf(this.props.user._id) !==-1,
+		    dp: this.props.post.by.profilePic? url+this.props.post.by.profilePic:
+		     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg9bcqOOnchsEiViN-H9qdrKISJtIAWKIqRK_HweHvJx6bjQfA"
+	   };
+	  
+	  console.log(this.props)
 	}
 	componentDidMount() { 
+		
 	}
-	deletePost= ()=>{
-		$.post('/main/deletePost',{_id: this.props.post._id},(res)=>alert(res.deleted));
+	setPostContent =(e)=> this.setState({content: e.target.value});
+	setComment =(e)=> this.setState({commentText: e.target.value});
+	addComment =(e)=>{
+		e.target.disabled=true;
+		$.post('/main/addComment',{_id: this.state._id,content: this.state.commentText},
+			   (res)=>{
+			   	console.log(res);
+			   	if(res) {
+			   		this.setState({ comments :this.state.comments.concat(res) });
+			   	}
+			   }
+		);
 	}
+	addLike =(e)=>{
+		if(this.state.liked) {
+			alert('already liked');
+			return ;
+		}
+		$.post('/main/addLike',{_id: this.state._id},(res)=>{
+			alert(res.added);
+			this.setState({likes: this.state.likes+1});
+		});
+	}
+	addDislike =(e)=>{
+		if(this.state.disliked) {
+			alert('already disliked');
+			return ;
+		}
+		$.post('/main/addDislike',{_id: this.state._id},(res)=>{
+			alert(res.added);
+			this.setState({likes: this.state.dislikes+1});
+		});
+	}
+
+	deletePost =(e)=>{
+		$.post('/main/deletePost',{_id: this.props.post._id},(res)=>{
+			alert(res.deleted);
+			this.setState( { hidden: true });
+		});
+	}
+	updatePost =()=>{
+		$.post('/main/updatePost',this.state,(res)=>{ 
+			alert(res.updated);
+		  } );
+	}
+	sharePost =()=>{ }
+
 	render() {
 	return (
 		<div className='row timeline-post' 
-		 style={{ padding: '0 0 0 0'}}>
+		 style={{ padding: '0 0 0 0', fontSize: '12px',display: this.state.hidden? "none": "block"}}>
 			<div className='post-title col-s-12'>
+			<span className='chip'>{this.props.post.by} </span>
 			
-			
-			<span className='card-panel chip right black white-text'> 
-			<img src="https://scontent.fccu3-1.fna.fbcdn.net/v/t1.0-9/30411943_1720444524681460_3667140968219410432_n.jpg?_nc_cat=0&oh=5fe63c9b7ee6d61b02f4ab0ec3ab356f&oe=5B62CB10" alt="none" className="circle small-dp" />
-			<span className='chip red darken-3' style={{ color: '#fff' }}> { this.props.post.by}</span>
-			<span className='chip blue-grey darken-4 white-text'>{ this.props.post.date.toString() } </span>
+			<span className='card-panel chip grey darken-4 right white-text'> 
+			<img src={this.state.dp} alt="no dp" className="circle small-dp" />
+			<span className='chip grey darken-3' style={{ color: '#fff' }}> { this.props.post.by}</span>
+			<span className='chip grey darken-3 white-text'>{ new Date(this.props.post.date).toString() } </span>
 
 			</span>
-			<Row>
-				<Button className='cyan darken-3 ui-button' icon='create' disabled={this.state.editable}>update</Button>
-				<Button className='yellow darken-3 ui-button' icon='delete_forever' onClick={this.deletePost}>delete</Button>
-			</Row>
+			
 			</div>
-			<textarea style={{ width: '100%', height: '110px' ,background: '#14242E',color: '#fff',
+			<textarea className='post-content-textarea'style={{ width: '100%' ,background: '#14242E',color: '#fff',
 			fontFamily: 'roboto',
-			 overflow: 'auto',border: 'none', borderRadius: '7px',padding: '10px 10px 10px 10px'}} defaultValue= {this.props.post.content} />
+			 overflow: 'auto',border: 'none', borderRadius: '7px',padding: '10px 10px 10px 10px'}}
+			  defaultValue= {this.props.post.content} onChange={ this.setPostContent }/>
+			
+			 <img src={`http://192.168.0.100:5000/uploads/${this.props.post.image}`} alt='no image' className='responsive-image'
+			  style={{ maxHeight: '220px', maxWidth: '100px'}}/>
+			 { this.props.post.video?
+			   <video controls style={{ width: '100%'}}>
+			     <source src={url+this.props.post.video } />
+			   </video> : <div> no video</div>}
 			 <div className='post-buttons card-panel col-s-12' style={{ background: '#14242E'}}>
-			 	<span > <Button floating className='light-blue z-depth-3' icon='thumb_up' /> 0 likes </span>
-			 	<span ><Button floating className='orange darken-3' icon='thumb_down' /> 0 dislikes</span>
-			 	<span ><Button floating className='cyan darken-2' icon='screen_share' /></span>
-			 	<span ><Button floating className='blue-grey darken-3 darken-3' icon='comment' /></span>
+			 	<span > <Button floating className={ `z-depth-3 $(this.state.liked? 'red':'')`} icon='thumb_up' 
+			 	        onClick={this.addLike} /> {this.state.likes} likes </span>
+			 	<span ><Button floating className='orange darken-3' icon='thumb_down' 
+			 	        onClick={this.addDislike} /> { this.state.dislikes } dislikes</span>
+			 	<Button className='cyan darken-2 ui-button' icon='screen_share' >share</Button>
+			 	
+
+			 	<Button className='cyan darken-3 ui-button' icon='create' 
+			 			onClick={this.updatePost} >update</Button>
+			 	<Button className='yellow darken-3 ui-button' icon='delete_forever' 
+			 	   onClick={this.deletePost}>delete</Button>
+			 	<div className='textarea-container' style={{ position: 'relative'}}>
+			 		<textarea className='comment-textarea col-s-12' placeholder='Type here to add comment'
+			 		 onChange={this.setComment }/>
+			 		<Button floating className='waves-effect light-blue darken-1 col-s-12 waves-effect' icon='add'
+			 		 style={{ position: 'absolute',left: '0', top: '1px', boxShadow: '1px 0 8px black' }}
+			 		  onClick={this.addComment}>add comment</Button>
+			 	</div>
 			 
 			 </div>
 			 <div className='post-comment-container card-panel col-s-12 row' style={{ background: '#14242E'}}>
-			 	<div className='textarea-container' style={{ position: 'relative'}}>
-			 		<textarea className='comment-textarea col-s-12'placeholder='Type here to add comment'/>
-			 		<Button floating className='red darken-4 ui-button col-s-12 waves-effect' icon='add'
-			 		 style={{ position: 'absolute',right: '0', top: '-1px' }}>add comment</Button>
-			 	</div>
-			 	<div className='card-panel z-depth-4'>
+			 	
+			 	<div className=' card-panel  comment-section' style={{ maxHeight: '250px', overflow: 'scroll', 
+			    background: 'transparent'}}>
+			 	 
+			 	 {this.state.comments.map((comment,i)=>
+			 	 	<Row className='card-panel comment z-depth-3 row timeline-post'> 
+			 	 	  
+			 	 		<Col s={2} > 
 
+			 	 			<img src={url+comment.by.profilePic}  
+			 	 				alt="none" className="circle small-dp" /><br />
+			 	 			<span className='chip cyan darken-4 white-text' style={{ fontSize: '11px', }}>{ comment.by.name}</span>
+
+			 	 		</Col>
+			 	 		<Col s={10}  style={{ display: 'inline'}}>
+			 	 			{comment.content}
+			 	 		</Col>
+
+			 	 	</Row>
+			 	 )}
+			 	 
 			 	</div>
 			 </div>
 
@@ -64,7 +157,7 @@ class Post extends Component {
 class Timeline extends Component {
   constructor(props) {
     super(props);
-    this.state = { posts: [] };
+    this.state = { posts: [],user: this.props.user };
   }
   componentDidMount() { 
   	$.get('/main/getAllPost',{ _id: this.state.id },(res)=>{ this.setState({posts: res}); } );
@@ -75,7 +168,8 @@ class Timeline extends Component {
   	<div className="Timeline row" >
   	{
   		this.state.posts.reverse().map((post,i)=>
-  			<Post key={`post${i}`} post={post} />
+  			<Post key={`post${i}`} post={post} editable={ this.props.user._id === post.by }
+  			 user={this.state.user}/>
 
   		)
   	  
