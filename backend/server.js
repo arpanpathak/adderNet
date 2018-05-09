@@ -7,6 +7,7 @@ const app = express(),
       multer=require('multer'),
       path=require('path');
 const cors = require('cors');
+const helpers = require('./lib/helpers');
 // allowing ajax request...
 app.use(cors({origin: '*'}));
 
@@ -26,20 +27,27 @@ app.post('/music', (req, res) => {
 
 /** testing multer **/
 app.use('/uploads', express.static(path.join(__dirname, './uploads')));
-var storage = (dir,)=>
- multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  }
-})
  
-var upload = multer({ storage: storage });
-app.post('/file',upload.single('avtar'), (req, res) => {
-  res.send('hola');
+//create a storage engine
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, req.NAME);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
 });
+
+//Setting up multer
+const upload = multer({
+  storage:storage,
+  limits:{fileSize:25*1024*1024},
+    fileFilter: function(req, file, cb){
+      helpers.sanitize(req, file, cb);
+    }
+}).any();
+
+
 /** end of section **/
 const port = 5000;
 
