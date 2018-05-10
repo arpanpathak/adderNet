@@ -20,23 +20,6 @@ module.exports = (app) => {
 	app.use( bodyParser.urlencoded({ extended: true} ) );
 	app.use(cookieParser());
 	// database connection..
-	mongoose.connect( keys.mongodb.db );
-	mongoose.connection.on('connected',()=>{ console.log('connected to MongoDB') });
-	mongoose.connection.on('error',(err)=>{ console.log(err) });
-
-	// using MongoDB store for session...
-	app.use(session({
-	    secret: 'this is secret',
-	    name: 'user-session-cookie',
-	    cookie: { maxAge: null },
-	    store: new MongoStore({mongooseConnection : mongoose.connection}),
-	    proxy: true,
-	    resave: true,
-	    secure: false,
-	    saveUninitialized: true
-	}));
-
-	app.use(passport.initialize());
-	app.use(passport.session());
+	
 
 }

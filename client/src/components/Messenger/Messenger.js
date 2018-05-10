@@ -22,7 +22,7 @@ class Messenger extends Component {
   }
   componentDidMount() { 
     $('body').css('overflow': 'hidden');
-    $.get('/main/getAllFriends',(res)=> this.setState( { friends: res} ) );
+    $.post('/main/getAllFriends',{'_id':this.props.user._id},(res)=> this.setState( { friends: res} ) );
   }
   handleChange = (e) => {
     this.setState( { [e.target.id]: e.target.value } );
@@ -34,6 +34,7 @@ class Messenger extends Component {
     $('.user-found').removeClass('active');
     this.setState({to: id});
     $('.user-found').eq(i).addClass('active');
+    let conversation_id= this.props.user._id<id? this.props.user._id+"_"+id: id+"_"+this.props.user._id
   }
   render(){ 
   	return(
@@ -55,26 +56,7 @@ class Messenger extends Component {
               </Row>
             </CollectionItem>)
           }
-          <CollectionItem className='user-found' onClick={ this.userSelected.bind(this,"fuck1",2) }>
-            <Row style={{ cursor: 'pointer '}} > 
-            <Col s={2}  >
-            <img src="https://image.flaticon.com/icons/png/512/23/23228.png" alt="none" className="circle responsive-img" />
-            </Col>
-            UserName
-            <span className="badge green-text">Online</span>
-            </Row>
-          </CollectionItem>
-          <CollectionItem className='user-found active' onClick={ this.userSelected.bind(this,"dijkstra",3) }>
-            <Row style={{ cursor: 'pointer '}} > 
-            <Col s={2}  >
-            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="small-dp" />
-            </Col>
-            <Col s={10}>
-            computerScienceGOD
-            <span className="badge green-text">Online</span>
-            </Col>
-            </Row>
-          </CollectionItem>
+        
  				</Collection>
  				</div>
 
@@ -98,25 +80,7 @@ class Messenger extends Component {
           <div className='card messenger-message-to'>This is message</div> 
           <div className='card messenger-message-from'>This is message</div>  
           <div className='card messenger-message-to'>send bob vagina </div> 
-          <div className='card messenger-message-from'>
-            <Row> 
-            <Col s={3}  >
-            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="small-dp" />
-            <span className='chip' style={{ background: '#333', color: '#fff' }}> username
-            <br />
-            date
-            </span>
-            </Col>
-            <Col s={9}><p>Last Message!!!!!!!! </p> 
-              <ul>
-              <li> Computer science is no more about computers than astronomy is about telescopes. </li>
-              <li>Simplicity is prerequisite for reliability.</li>
-              <li>The question of whether a computer can think is no more interesting than the question of whether a submarine can swim.</li>
-              </ul>
-            </Col>
-            </Row>
-            
-          </div> 
+          <div className='card messenger-message-from'></div> 
           
         </div>
         <Row className='card-panel' >

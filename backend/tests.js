@@ -20,18 +20,7 @@ module.exports = (app)=> {
 			res.send( user ); 
 		});
 	});
-	app.get('/main/getAllFriends', (req,res)=>{
-		User.findOne({ _id: req.user._id}).populate('friends').exec((err,user)=> {
-			var data=[];
-			user.friends.forEach((friend)=> 
-				data.push({name: friend.name, profilePic: friend.profilePic,_id: friend._id})
-			);
-
-			res.send(data);
-		}
-		);
-		
-	});
+	
 	// delete all user
 	app.get('/delete_all',(req,res)=> User.remove({ },(err)=> res.send(err? err:  'cleared all users..') ) );
 }

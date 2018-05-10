@@ -90,3 +90,6 @@
     border-bottom: 20px solid transparent; 
     border-right: 20px solid #fff; 
 }
+.neg-margin {
+    margin-top: -42px !important;
+}

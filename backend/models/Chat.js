@@ -4,7 +4,7 @@ const messageSchema = new mongoose.Schema({
   by: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
   to: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
   type: { type: String, default: "plain"} ,
-  data: Date, // stores timestamp ..
+  data: { type: Date, default: Date.now }, // stores timestamp ..
   react: { type: String, default: null },
   status : { type: String, default: 'sending' }, // status codes: [sending,sent,read,reacted]
   showMessage: Boolean
@@ -12,7 +12,8 @@ const messageSchema = new mongoose.Schema({
 
 const conversationSchema = new mongoose.Schema({
    // id format fromUserId_toUserId if fromUserId<toUserId ..
-   id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
+   _id: {type: String}, 
+   messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message'}],
 });
 
 module.exports = {

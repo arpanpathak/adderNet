@@ -26,7 +26,7 @@ let upload = multer({ storage: storage });
 /* end of this section */
 
 // all server API ..
-module.exports = (app,passport) => {
+module.exports = (app,passport,io) => {
 
 	// an API to get all the details about the developers/creators ...
 	app.get('/creators', (req, res) => {
@@ -154,6 +154,19 @@ module.exports = (app,passport) => {
 		User.findByIdAndUpdate( req.user._id, { coverPic: req.files['image'][0].filename.toString() }).
 		then((user)=>res.send( { 'changed': true,coverPic: req.files['image'][0].filename.toString()} ));
 	});
+	app.post('/user/addFriend',(req,res)=>{
+		User.findById(req.user._id).then((user)=>{
+			user.friends.push(req.body._id);
+			user.friend_requests_send.push(req.body._id);
+			User.findById(req.body._id).
+			then((friend_request_user)=>{
+				friend_request_user.friend_requests.push(req.user._id);
+				friend_request_user.save();
+				user.save().then(res.send({added: true}));
+			});
+			
+		});
+	});
 	/*** end of this section ***/
 
 	/*** user post APIs ***/
@@ -234,8 +247,8 @@ module.exports = (app,passport) => {
 			});
 			
 	});
+
 	app.post('/main/getAllPostById',(req,res) => {
-		console.log('hola',req.body._id);
 		User.findById(req.body._id).populate( [
 		 { path: 'posts',
 		   populate:  { 
@@ -330,19 +343,28 @@ module.exports = (app,passport) => {
 	});
 
 	app.get('/main/getConversation',(req,res) => {
+		let conversation_id= (req.user._id<req.body.to)
 		Conversation.findById(req.body._id).then((conversation)=>{ res.send(conversation)});
 	});
+		
 
-
-	app.get('/main/upload',(req,res) => {
-
+	app.get('/currentUser',(req,res)=> User.findById(req.user._id).then((user)=>res.send(user)));
+	app.post('/getUserById',(req,res)=> User.findById(req.body._id).then((user)=>res.send(user)));
+	app.post('/main/getAllFriends', (req,res)=>{
+		User.findById(req.body._id).populate({
+			path: 'friends',
+			select: 'name profilePic coverPic'
+		}).then((user)=>res.send(user.friends));
 	});
+
+	app.post('/main/getAllFriendsId', (req,res)=>{
+		User.findById(req.body._id).
+			then((user)=>res.send(user.friends));
+	});
+
 		
 	/*** ......................... **/
 	// Test API
 	//importing the unit test file....
-
-	app.get('/currentUser',(req,res)=> User.findById(req.user._id).then((user)=>res.send(user)));
-	app.post('/getUserById',(req,res)=> User.findById(req.body._id).then((user)=>res.send(user)));
 	require('./tests.js')(app); 
 }

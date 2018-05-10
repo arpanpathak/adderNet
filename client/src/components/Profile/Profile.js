@@ -21,6 +21,8 @@ const Loading = ({ type, color }) => (
     <ReactLoading type={type} color={color} height={'200px'} width={'200px'} delay={0}/>
     </div>
 );
+
+
 /*** end of this import ***/
 class Profile extends Component {
   constructor() {
@@ -30,7 +32,6 @@ class Profile extends Component {
       user: null,
       loading: true,
     };
-    this.socket = io('localhost:5000');
   }
 
   componentDidMount() {
@@ -38,11 +39,15 @@ class Profile extends Component {
     $.ajaxSetup({ cache: false });
     $.get( '/authenticated',(res)=>{ 
             this.setState( { authenticated: res.authenticated,user: res.user,loading:false} ); 
-            console.log(this.state);
+            this.socket = io('localhost:5000');
+
           });
+
   }
 
   render() {
+
+    console.log(this.socket);
     if(this.state.loading) return <Loading type='bars' color='crimson' />;
     if(!this.state.authenticated)
       return <div>You are not authorized to view this page <Link to={`/home/login/${window.location.href.split('/').pop()}` } > Click Here</Link> </div> ;
@@ -58,11 +63,11 @@ class Profile extends Component {
                <Route path="/profile/feed" render={()=>(<div className='white z-depth-2' style={{ height: '100%'}}> 
 
                 </div>)} />
-               <Route exact path="/profile/messenger" component={Messenger} socket={this.socket} />
+               <Route exact path="/profile/messenger" component={()=><Messenger socket={this.socket} user={this.state.user} />}  />
                <Route exact path="/profile/myposts" component={()=><MyPosts user={this.state.user} />} />
                <Route exact path="/profile/timeline/:id?" component={()=><Timeline user={this.state.user}
                 socket={this.socket } /> } />
-               <Route path="/profile/user" component={()=><div> </div>} />
+               <Route path="/profile/search" component={()=><div> search</div>} />
                <Route component={Error404} />
               </Switch>
            </div>
