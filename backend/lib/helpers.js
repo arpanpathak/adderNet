@@ -8,7 +8,8 @@ const https= require('https');
 const querystring = require('querystring');
 const crypto = require('crypto');
 const config = require('../config/keys');
-var prettyHtml = require('json-pretty-html').default; 
+var prettyHtml = require('json-pretty-html').default;
+var User = require('../models/User');
 
 //Container for all helpers
 var helpers = {};
@@ -120,6 +121,15 @@ helpers.sanitize = (req, file, cb) => {
   else{
     cb('Error: Images Only!!');
   }
+};
+
+//Search Friend
+helpers.searchFriend = function(name, callback){
+  User.find({$or:[{name: new RegExp(name, "i")},{username: new RegExp(name, "i")},{email: new RegExp(name, "i")}]},null,{sort:'id'}).select('name').select('username').then((data)=>{
+        callback(false, data);
+  },(err)=>{
+    callback(err);
+  });
 };
 
 // inline styling for JSON.. 
