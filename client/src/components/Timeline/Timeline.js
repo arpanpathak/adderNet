@@ -8,7 +8,7 @@ import { Col,Row,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,N
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
 import queryString from 'query-string';
 
-const url="http://192.168.0.100:5000/uploads/",
+const url="http://172.21.241.15:5000/uploads/",
 	  default_dp="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg9bcqOOnchsEiViN-H9qdrKISJtIAWKIqRK_HweHvJx6bjQfA";
 class Post extends Component {
 	constructor(props) {
@@ -102,7 +102,7 @@ class Post extends Component {
 			 overflow: 'auto',border: 'none', borderRadius: '7px',padding: '10px 10px 10px 10px'}}
 			  defaultValue= {this.props.post.content} onChange={ this.setPostContent }/>
 			 
-			 <img src={`http://192.168.0.100:5000/uploads/${this.props.post.image}`} alt='no image' className='responsive-image'
+			 <img src={url+this.props.post.image} alt='no image' className='responsive-image'
 			  style={{  width: '300px', height: '400px' ,maxWidth: '100%'}} />
 			 { this.props.post.video?
 			   <video controls style={{ maxWidth: '500px'}}>
@@ -254,7 +254,7 @@ class MyPosts extends Component {
   	      
   	     }
   	    </Tab>
-  	    <Tab title="shares" >
+  	    <Tab title={ `shares(${this.state.shares.length})`} >
   	    {
   	    	this.state.shares.map((post,i)=>
   	    		<Post key={`post-shares-${i}`} post={post} editable={ this.props.user._id ===  post.by._id }

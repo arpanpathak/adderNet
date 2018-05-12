@@ -30,11 +30,12 @@ class CreatePost extends Component {
     // $.post('/main/createPost', this.state,(res)=>{
     //   alert(res._id);
     // });
-    $(e.target).attr('disabled','disabled');
-    var data=new FormData();
+    
+    var data=new FormData;
+  
+    data.append('image',this.state.image);
+    data.append('video',this.state.video);
     data.append('postContent',this.state.postContent);
-    data.append('image',this.state.image,'image');
-    data.append('video',this.state.video,'video');
     console.log(data);
     $.ajax({
                type: "POST",
@@ -43,12 +44,13 @@ class CreatePost extends Component {
                data: data,
                processData: false,
                cache: false,
-               timeout: 600000,
                success:  (res) =>{
                   alert("Post added, post id="+res._id);
+                  
                },
                error: (e) => alert(e.responseText)
            });
+
     // $(e.target).removeAttr('disabled','disabled');
   }
   handleImageUpload = (e) => {
@@ -62,8 +64,8 @@ class CreatePost extends Component {
         bottomSheet fixedFooter
         actions={<div> 
           <Button type='button' className='red col-s-4' icon='create' onClick={ this.create }>POST</Button>
-          <input type='file' name='image-file' style={{ display: 'none'}} id='image-upload-btn'  onChange={ this.setImage }/>
-          <input type='file' name='video-file' style={{ display: 'none'}} id='video-upload-btn'  onChange={ this.setVideo }/>
+          <input type='file' name='image-file' style={{ display: 'none'}} id='image-upload-btn'  accept='image/*' onChange={ this.setImage }/>
+          <input type='file' name='video-file' style={{ display: 'none'}} id='video-upload-btn'  accept='video/*' onChange={ this.setVideo }/>
           <Button type='button' className='cyan darken-3 col-s-4' icon='image' onClick={(e)=>$('#image-upload-btn').click() } >upload image</Button>
           <Button type='button' className='blue-gret darken-3 col-s-4' icon='videocam' onClick={(e)=>$('#video-upload-btn').click()}>upload video</Button>
         </div>}

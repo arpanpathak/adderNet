@@ -362,7 +362,7 @@ module.exports = (app,passport,io) => {
 				  conversation.save();
 				 
 			}  
-			res.send(conversation.messages.reverse() );
+			res.send(conversation.messages );
 		} );
 	});
 	app.post('/main/sendMessage',(req,res)=>{
@@ -380,10 +380,12 @@ module.exports = (app,passport,io) => {
 				conversation.save().then( ()=>{ 
 					Online.find({id: req.body.to}).then((onlineData)=>{
 					          onlineData.forEach((onlinePerson)=>{
+					          	console.log('emiting to '+req.body.to);
 					            io.to(onlinePerson.socket).emit('message-received',msg);
 					          });
 					 });
 					Online.find({id: req.user._id}).then((onlineData)=>{
+							 console.log('emiting to '+req.user._id);
 					          onlineData.forEach((onlinePerson)=>{
 					            io.to(onlinePerson.socket).emit('message-sent',msg);
 					          });

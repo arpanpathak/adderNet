@@ -8,7 +8,7 @@ import { Row,Col,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,N
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
 import Nav from './../ProfileNavbar/Navbar';
 import ReactLoading from 'react-loading';
-import openSocket from "socket.io-client";
+import SocketIOClient from "socket.io-client";
 
 /*** import your components here ***/
 import Messenger from './../Messenger/Messenger';
@@ -33,7 +33,7 @@ class Profile extends Component {
       user: null,
       loading: true,
     };
-    this.socket=openSocket('http://localhost:5000');
+    this.socket=SocketIOClient('http://172.21.241.15:5000');
   }
 
   componentDidMount() {

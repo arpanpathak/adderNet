@@ -9,7 +9,7 @@ import {Redirect,Link} from 'react-router-dom';
 import Messages from './Messages/Messages';
 import CreatePost from './CreatePost/CreatePost';
 import Notifications from './Notifications/Notifications';
-const url="http://192.168.0.100:5000/uploads/";
+const url="http://172.21.241.15:5000/uploads/";
 /** end of this section **/
 class Nav extends Component {
   constructor(props) {
@@ -98,8 +98,8 @@ class Nav extends Component {
                 email: this.state.email
               }}
             />
-           <input type='file' id='dp-upload-button' onChange={this.changeDp} style={{ display: 'none'}}/>
-           <input type='file' id='coverpic-upload-button' onChange={this.changeCoverPic} style={{ display: 'none'}}/>
+           <input type='file' id='dp-upload-button' accept="image/*" onChange={this.changeDp} style={{ display: 'none'}}/>
+           <input type='file' id='coverpic-upload-button' accept="image/*" onChange={this.changeCoverPic} style={{ display: 'none'}}/>
            <Button type='button' style={{ fontSize: '9px',wordWrap: 'break-word'}} onClick={ ()=>$('#dp-upload-button').click()}> change dp </Button>
            <Button type='button' className='red lighten-1' style={{ fontSize: '9px',wordWrap: 'break-word'}} onClick={ ()=>$('#coverpic-upload-button').click()}> change coverPic </Button>
             

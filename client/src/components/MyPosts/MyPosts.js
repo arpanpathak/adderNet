@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { Col,Row,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,NavItem
          , Collapsible,CollapsibleItem ,Tabs, Tab,Card,CardTitle} from 'react-materialize';
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
-const url="http://192.168.0.100:5000/uploads/";
+const url="http://172.21.241.15:5000/uploads/";
 class Post extends Component {
 	constructor(props) {
 	  super(props);
