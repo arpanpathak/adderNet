@@ -23,16 +23,18 @@ mongoose.connection.on('connected',()=>{ console.log('connected to MongoDB') });
 mongoose.connection.on('error',(err)=>{ console.log(err) });
 const mongooseStore=new MongoStore({mongooseConnection : mongoose.connection});
   // using MongoDB store for session...
-  app.use(session({
+  var sessionMiddleware = session({
       secret: 'this is secret',
       name: 'user-session-cookie',
+      key: 'user-session-cookie',
       cookie: { expires: new Date(253402300000000) },
       store: mongooseStore,
       // proxy: true,
        resave: true,
       // secure: false,
        saveUninitialized: true
-  }));
+  });
+  app.use(sessionMiddleware);
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -90,26 +92,25 @@ const socket = require('socket.io'),
 io = socket(server);
 // io.use(passportSocketIo.authorize({
 //   cookieParser: cookieParser,
+//   //name: 'user-session-cookie',
 //   key: 'user-session-cookie',
 //   secret: 'this is secrete',
-//   passport: require('passport'),
+//   passport: passport,
 //   store: mongooseStore,
 //   success: (data,accept)=>{console.log('authorizeed.'); accept(null,true) },
 //   fail: (data, message, error, accept)=>{
 //   if(error)
 //     throw new Error(message);
-//   console.log('failed connection to socket.io:', message);
+//   console.log(data);
 //   accept(null, false);
 // }
 
 // }));
-io.on('connection', (socket,data) => {
-    console.log("Someone connected", socket.request.user);
-    io.on('disconnect', (socket,data) => {
-    console.log("Someone connected", socket.request.user);
-    });
-    io.on('join',(data)=>console.log(data));
+io.use(function(socket, next) {
+    sessionMiddleware(socket.request, socket.request.res, next);
 });
 
+// importing API routes....
+require('./api')(app,passport,io);
+
 // importing get and post APIs
-const api=require('./api')(app,passport,io);

@@ -8,7 +8,7 @@ import { Row,Col,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,N
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
 import Nav from './../ProfileNavbar/Navbar';
 import ReactLoading from 'react-loading';
-import io from "socket.io-client";
+import openSocket from "socket.io-client";
 
 /*** import your components here ***/
 import Messenger from './../Messenger/Messenger';
@@ -23,6 +23,7 @@ const Loading = ({ type, color }) => (
 );
 
 
+
 /*** end of this import ***/
 class Profile extends Component {
   constructor() {
@@ -32,29 +33,34 @@ class Profile extends Component {
       user: null,
       loading: true,
     };
+    this.socket=openSocket('http://localhost:5000');
   }
 
   componentDidMount() {
 
     $.ajaxSetup({ cache: false });
+    var socket=null;
     $.get( '/authenticated',(res)=>{ 
-            this.setState( { authenticated: res.authenticated,user: res.user,loading:false} ); 
-            this.socket = io('localhost:5000');
+            this.setState( { authenticated: res.authenticated,user: res.user,loading:false,
+                            // socket: socketIOClient('http://localhost:5000')
+
+                          });
+            // socket=io.connect('http://localhost:5000',{query: "id="+res.user.id});
 
           });
+    this.socket.on('logout',(data)=>this.setState({authenticated: false}));
 
   }
 
   render() {
-
-    console.log(this.socket);
+    this.socket.on('fuck',(data)=>alert(data.given));
     if(this.state.loading) return <Loading type='bars' color='crimson' />;
     if(!this.state.authenticated)
       return <div>You are not authorized to view this page <Link to={`/home/login/${window.location.href.split('/').pop()}` } > Click Here</Link> </div> ;
     
     return ( 
        <div >
-       <Nav user={this.state.user}/>
+       <Nav user={this.state.user} socket={this.socket}/>
        
        <div className='row'>
            
@@ -81,7 +87,7 @@ class Profile extends Component {
                 <CollectionItem  >
                   <Row style={{ cursor: 'pointer '}} > 
                   <Col s={12}  >
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="circle prefix-image"  />
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Edsger_Wybe_Dijkstra.jpg" alt="none" className="small-dp"  />
                   </Col>
                   computerScienceGOD
                   <span className="badge green-text">Online</span>

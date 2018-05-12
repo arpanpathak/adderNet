@@ -1,20 +1,36 @@
 /*** use this template code to create new component ***/
 
 import React, { Component } from 'react';
-import "./style.css"; // import your css file for this component
+import "./Notifications.css"; // import your css file for this component
 import $ from 'jquery';
 import { Row,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,NavItem
-         , Collapsible,CollapsibleItem ,Tabs, Tab} from 'react-materialize';
+         , Collapsible,CollapsibleItem ,Tabs, Tab,Modal} from 'react-materialize';
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
 
-class Name extends Component {
+class Notifications extends Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = { notifications: 0 };
   }
   componentDidMount() { }
 
-  render = ()=> <div className="your-component-name"> Your component here</div> ;
+  render() { 
+  	return (
+	  	<Modal
+	        header={ <div style={{ position: 'fixed',top: '0', fontSize: '11px'}}><Icon style={{ color: 'crimson' }}></Icon>
+	        notifications<span className='badge new'>{this.state.notifications} </span></div> }
+	        fixedFooter
+	       		
+	        trigger={<div><span> {this.state.notifications} </span><Icon left>notifications</Icon></div> } className='Notifications'
+	     >
+	        <Row style={{ overflow: 'scroll' }}>
+	         
+	        
+	        </Row>
+	      </Modal>
+
+  	);
+  }
 }
 
-export default Name;
+export default Notifications;

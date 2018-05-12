@@ -4,10 +4,11 @@ const messageSchema = new mongoose.Schema({
   by: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
   to: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
   type: { type: String, default: "plain"} ,
-  data: { type: Date, default: Date.now }, // stores timestamp ..
+  date: { type: Date, default: Date.now }, // stores timestamp ..
+  data: String,
   react: { type: String, default: null },
   status : { type: String, default: 'sending' }, // status codes: [sending,sent,read,reacted]
-  showMessage: Boolean
+  showMessage: { type: Boolean, default: true }
 });
 
 const conversationSchema = new mongoose.Schema({

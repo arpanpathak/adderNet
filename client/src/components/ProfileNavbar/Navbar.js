@@ -8,7 +8,7 @@ import {Redirect,Link} from 'react-router-dom';
 /** importing navbar common components for all the pages **/
 import Messages from './Messages/Messages';
 import CreatePost from './CreatePost/CreatePost';
-
+import Notifications from './Notifications/Notifications';
 const url="http://192.168.0.100:5000/uploads/";
 /** end of this section **/
 class Nav extends Component {
@@ -68,7 +68,7 @@ class Nav extends Component {
            });
   }
   componentDidMount() {
-    console.log(this.state)
+
   }
 
   render() {
@@ -78,7 +78,7 @@ class Nav extends Component {
         <NavItem>
          <Messages />
         </NavItem>
-         <NavItem><div>Notifications<Icon left>notifications</Icon></div></NavItem>
+         <NavItem><Notifications /></NavItem>
          <NavItem href='/profile/messenger' ><div>messenger<Icon left>chat_bubble_outline</Icon></div></NavItem>
          <NavItem href='javascript:void(0)' ><div>friend requests<Icon left>thumbs_up_down</Icon></div></NavItem> 
          <NavItem> 
@@ -87,7 +87,7 @@ class Nav extends Component {
          <NavItem href='/profile/myposts'><div>my posts<Icon left>list</Icon></div></NavItem>
          <NavItem href='javascript:void(0)' ><div>search<Icon left>search</Icon></div></NavItem> 
          <SideNav
-           trigger={<div><Icon left>more</Icon></div> }
+           trigger={<span><Icon left>more</Icon></span> }
            options={{ closeOnClick: true }}
            >
            <SideNavItem userView
@@ -107,10 +107,10 @@ class Nav extends Component {
            <SideNavItem href='/profile/friends' icon='user'>friends</SideNavItem>
            <SideNavItem href={`/profile/timeline/${this.props.user._id}`} icon='profile'>My Timeline</SideNavItem>
            <SideNavItem divider />
-           <SideNavItem subheader>Subheader</SideNavItem>
-           <SideNavItem waves href='#!third'>Third Link With Waves</SideNavItem>
+           <SideNavItem subheader>My groups</SideNavItem>
+           <SideNavItem waves href='#!third'>Settings</SideNavItem>
          </SideNav>
-         <NavItem><div>logout<Icon left>power_settings_new</Icon></div></NavItem> 
+         <NavItem href='javascript:void(0)'><div onClick={()=>$.get("/logout") }>logout<Icon left>power_settings_new</Icon></div></NavItem> 
        </Navbar>
        
     );

@@ -83,3 +83,10 @@
 	top: 0 !important;
 	margin: 0 0 0 0 !important;
 }
+
+#nav-mobile i {
+    position: absolute !important;
+    right: 5px !important;
+    top: 0 !important;
+    margin: 0 0 0 0 !important;
+}

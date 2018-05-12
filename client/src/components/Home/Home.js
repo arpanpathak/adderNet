@@ -18,7 +18,7 @@ class Home extends Component {
 
 	render() {
 		return (
-			<Row >
+			<Row style={{ overflow: 'scroll'}}>
 				
 				<Slider>
 				  <Slide

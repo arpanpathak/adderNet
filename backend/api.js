@@ -1,13 +1,14 @@
 /*** import your models here ***/
+/*** | =======================================IMPORTS==============================================================    |***/
 const mongoose = require('mongoose');
 
 const User=mongoose.model('user');
 const Post=mongoose.model('post');
-const Comment=mongoose.model('comment');
+const Comment=mongoose.model('comment'),
+	  Message=mongoose.model('Message');
 const Conversation=mongoose.model('Conversation');
 const config=require('./config/keys');
 const helpers=require('./lib/helpers');
-const prettyHtml = require('json-pretty-html').default; 
 const multer  = require('multer');
 const path = require('path');
 var storage = multer.diskStorage({
@@ -21,6 +22,8 @@ var storage = multer.diskStorage({
 })
 let upload = multer({ storage: storage });
 
+/*** ============================================================================================================ ***/
+
 /* internal API */
  // this piece of code is moved to /lib/helpers.js file
 /* end of this section */
@@ -28,6 +31,9 @@ let upload = multer({ storage: storage });
 // all server API ..
 module.exports = (app,passport,io) => {
 
+	require('./sockets/socket-routes.js')(io);
+	const Online=require('./models/online-model');
+	/// NOTE : -- socket.io added to this file.. you can emit any method to connected socket..
 	// an API to get all the details about the developers/creators ...
 	app.get('/creators', (req, res) => {
 	  const creators = [
@@ -98,7 +104,7 @@ module.exports = (app,passport,io) => {
 	app.get('/sendOTP',(req,res)=> helpers.sendTwilioSms("+919099994016","apni vogoban dada, ei nin OTP ="+helpers.RandomStringGenerate(6),
 									(err)=> res.send(err?err:'sent') ) 
 			);
-	/*** =================================================================== ***/
+	/*** =================================================================== ===============================================***/
 	/*** authentication API ***/
 	// this is the login api, here use passportJS callbacks to authenticate using
 	// any strategy you want.. to add OAuth strategy , edit the required setup file...
@@ -113,6 +119,7 @@ module.exports = (app,passport,io) => {
 		req.logout();
 		
 		res.json({ message: 'logged out','status': 'logged out'}) ;
+		io.emit('logout',{data: 'test'});
 	});
 	
 
@@ -143,7 +150,7 @@ module.exports = (app,passport,io) => {
 	  // This part of code will only be executed if successRedirect is not set in passport.authenticate()
 	  (req,res)=> { req.session.save((err)=>res.send(helpers.json_to_html(req.user)) ) } 
 	);
-	/*** =================================================================== ***/
+	/*** =========================================================================================================== ***/
 
 	/*** user info API ***/
 	app.post('/user/changeDp',upload.fields([{name: 'image',maxCount:1}]),(req,res)=>{
@@ -167,7 +174,7 @@ module.exports = (app,passport,io) => {
 			
 		});
 	});
-	/*** end of this section ***/
+	/*** ====================================================================================end of this section ***/
 
 	/*** user post APIs ***/
 	app.get('/allPost',(req,res)=> {
@@ -338,18 +345,63 @@ module.exports = (app,passport,io) => {
 	/** ================================================================ **/
 	/** end of this section **/
 
+
+	/*** ___________________message sending and retreiving APIs.____________________________ ***/
 	app.get('/main/getAllMessages',(req,res) => {
 		User.findById(req.body._id).populate('messages').then((messages)=>{ res.send(messages)});
 	});
-
-	app.get('/main/getConversation',(req,res) => {
-		let conversation_id= (req.user._id<req.body.to)
-		Conversation.findById(req.body._id).then((conversation)=>{ res.send(conversation)});
+	app.get('/t',(req,res)=> Conversation.find({}).then(conversation=>res.send(conversation)) );
+	app.post('/main/getConversation',(req,res) => {
+		let conversation_id= (req.user._id<req.body.to)? 
+							 (req.user._id+"_"+req.body.to) : (req.body.to+"_"+req.user._id);
+		console.log(conversation_id);
+		console.log(req.body.to);
+		Conversation.findById(conversation_id).populate('messages').then(conversation=>{ 
+			if(!conversation){
+				  conversation=new Conversation({_id: conversation_id });
+				  conversation.save();
+				 
+			}  
+			res.send(conversation.messages.reverse() );
+		} );
 	});
+	app.post('/main/sendMessage',(req,res)=>{
+		let conversation_id= (req.user._id<req.body.to)? 
+							 (req.user._id+"_"+req.body.to) : (req.body.to+"_"+req.user._id);
 		
+		if(req.body.to.trim()=="")
+			conversation_id=req.user._id; // 
+
+		var msg=new Message({data: req.body.data,by: req.user._id,to: req.body.to });
+		msg.save();
+		Conversation.findById(conversation_id).then(
+			conversation=>{
+				conversation.messages.push(msg);
+				conversation.save().then( ()=>{ 
+					Online.find({id: req.body.to}).then((onlineData)=>{
+					          onlineData.forEach((onlinePerson)=>{
+					            io.to(onlinePerson.socket).emit('message-received',msg);
+					          });
+					 });
+					Online.find({id: req.user._id}).then((onlineData)=>{
+					          onlineData.forEach((onlinePerson)=>{
+					            io.to(onlinePerson.socket).emit('message-sent',msg);
+					          });
+					 });
+					res.send({ sent: true}) 
+				});
+
+			}
+		)
+
+	});
+	
+	/*** ======================END======================================***/	
 
 	app.get('/currentUser',(req,res)=> User.findById(req.user._id).then((user)=>res.send(user)));
+
 	app.post('/getUserById',(req,res)=> User.findById(req.body._id).then((user)=>res.send(user)));
+
 	app.post('/main/getAllFriends', (req,res)=>{
 		User.findById(req.body._id).populate({
 			path: 'friends',
@@ -357,11 +409,18 @@ module.exports = (app,passport,io) => {
 		}).then((user)=>res.send(user.friends));
 	});
 
+	
 	app.post('/main/getAllFriendsId', (req,res)=>{
 		User.findById(req.body._id).
 			then((user)=>res.send(user.friends));
 	});
 
+	app.get('/newsFeed',(req,res)=>{
+		User.findById(req.user._id).populate({
+			path: 'friends',
+			select: 'posts'	
+		}).then(user=>res.send(user.friends)); // user.friends is now populated list of posts of all the friends...
+	});
 		
 	/*** ......................... **/
 	// Test API

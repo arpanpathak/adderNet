@@ -11,9 +11,7 @@ class Messenger extends Component {
   constructor(props) {
     super(props);
     this.state = {  
-      messages: [{from: 'testUser1'},{from: 'testUser2'},{from: 'testUser3'},{from: 'testUser1'},{from: 'testUser2'},{from: 'testUser3'},
-          {from: 'testUser1'},{from: 'testUser2'},{from: 'testUser3'},{from: 'testUser1'},{from: 'testUser2'},{from: 'testUser3'}]
-      ,
+      messages: [ ],
       userMessage: '',
       to: null,
       friends: [],
@@ -23,18 +21,36 @@ class Messenger extends Component {
   componentDidMount() { 
     $('body').css('overflow': 'hidden');
     $.post('/main/getAllFriends',{'_id':this.props.user._id},(res)=> this.setState( { friends: res} ) );
+    this.props.socket.on('message-received',(message)=>{
+      if(this.state.to===message.by)
+      this.setState({messages: this.state.messages.concat(message)});
+    });
+    this.props.socket.on('message-sent',(message)=>{
+      if(this.state.to===message.to)
+      this.setState({messages: this.state.messages.concat(message)});
+    });
   }
   handleChange = (e) => {
     this.setState( { [e.target.id]: e.target.value } );
   }
   sendMessage = (e) => {
-    alert(this.state.userMessage);
+    $.post('/main/sendMessage',{to: this.state.to,data: this.state.userMessage});
   }
+  sendImageMessage = (e) => {
+    
+  }
+  sendVideoMessage = (e) => {
+    
+    this.state.userMessage
+  }
+  
   userSelected = (id,i,e) => {
-    $('.user-found').removeClass('active');
-    this.setState({to: id});
-    $('.user-found').eq(i).addClass('active');
-    let conversation_id= this.props.user._id<id? this.props.user._id+"_"+id: id+"_"+this.props.user._id
+    if(id) {
+      this.setState({to: id});
+      $('.user-found').removeClass('active');
+      $('.user-found').eq(i).addClass('active');
+      $.post('/main/getConversation',{to: this.state.to},(res)=>this.setState({messages: res}));
+   }
   }
   render(){ 
   	return(
@@ -48,7 +64,7 @@ class Messenger extends Component {
  				<Collection>
  					{ this.state.friends.map((friend,i)=> 
             <CollectionItem key={`friend${i}`} onClick={ this.userSelected.bind(this,friend._id,i) } className='user-found' data-id={friend._id}>
-              <Row style={{ cursor: 'pointer '}} > 
+              <Row style={{ cursor: 'pointer '}}  > 
               <Col s={2}  >
               <img src="https://image.flaticon.com/icons/png/512/23/23228.png" alt="none" className="circle responsive-img" />
               </Col>
@@ -70,17 +86,10 @@ class Messenger extends Component {
            {
           //  this.state.messages.map((msg,i)=><div key={`profile-message${i}`} className='card messenger-message-to'>This is message{ msg.from}</div>)
           }
-          <div className='card messenger-message-to'>This is message</div> 
-          <div className='card messenger-message-from'>This is message</div>
-          <div className='card messenger-message-to'>This is message</div> 
-          <div className='card messenger-message-from'>This is message</div>  
-          <div className='card messenger-message-from'>This is message</div> 
-          <div className='card messenger-message-to'>This is message</div> 
-          <div className='card messenger-message-from'>This is message</div>
-          <div className='card messenger-message-to'>This is message</div> 
-          <div className='card messenger-message-from'>This is message</div>  
-          <div className='card messenger-message-to'>send bob vagina </div> 
-          <div className='card messenger-message-from'></div> 
+          {this.state.messages.map((message,id)=><div className={message.to===this.props.user._id? 'card messenger-message-to':
+            'card messenger-message-from'}>{new Date(message.date).toString()}{message.data} </div>) }
+           
+          
           
         </div>
         <Row className='card-panel' >

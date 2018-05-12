@@ -35,7 +35,7 @@ class Main extends Component {
 
   render() {
     return (
-    <div>
+    <div style={{ overflow: 'hidden'}}>
 		    <Route path='/music' component={() => window.location = 
           `http://127.0.0.1:8000/music/?userid=${this.state.user._id},email=${this.state.user.email}`
         }
@@ -51,7 +51,7 @@ class Main extends Component {
 			        <li><NavLink exact to='/music'>Music</NavLink></li>
             </Navbar>
             
-            <Switch style={{ overflow: 'auto'}}>
+            <Switch style={{ marginLeft: '5px'}}>
               <Route exact path="/home" component={Home} />
               <Route exact path="/home/login/:next?" component={Login} authencicated={this.state.authencicated} />
               <Route exact path="/home/signup" component={Signup} />
