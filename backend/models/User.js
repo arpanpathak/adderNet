@@ -30,5 +30,6 @@ const userSchema = new mongoose.Schema({
   notification: [ {type: mongoose.Schema.Types.ObjectId, ref: 'Notification'} ],
 });
 
-mongoose.model('user',userSchema);
+var User = mongoose.model('user',userSchema);
+module.exports = User;
 
