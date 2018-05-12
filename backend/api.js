@@ -427,3 +427,23 @@ module.exports = (app,passport,io) => {
 	//importing the unit test file....
 	require('./tests.js')(app); 
 }
+
+/*
+ * Search for friend below here
+ *
+ */
+
+app.get('/searchFriend',(req, res)=>{
+	name = typeof(req.query.name) == 'string' && req.query.name.trim().length > 0 ? req.query.name.trim() : false;
+	if(name){
+		helpers.searchFriend(name, (err, data)=>{
+			if(!err && data){
+				res.json(data);
+			}else{
+				res.send("No data found");
+			}
+		});
+	}else{
+		res.send("Error: Please enter valid search name");
+	}
+});
