@@ -8,8 +8,9 @@ const https= require('https');
 const querystring = require('querystring');
 const crypto = require('crypto');
 const config = require('../config/keys');
+const User = require('../models/User');
 var prettyHtml = require('json-pretty-html').default;
-var User = require('../models/User');
+
 
 //Container for all helpers
 var helpers = {};
