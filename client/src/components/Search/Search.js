@@ -58,6 +58,7 @@ class Search extends Component {
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg9bcqOOnchsEiViN-H9qdrKISJtIAWKIqRK_HweHvJx6bjQfA"} 
                 className='small-dp' />
                 <a href={`/profile/timeline/${user._id}`}><span> { user.name } </span>
+                
                 </a>
               </div>
             )

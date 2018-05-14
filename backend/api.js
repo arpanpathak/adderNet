@@ -1,3 +1,5 @@
+
+/*** ALL APIS, @author: arpanp_athak,tirthamouli_baidya,subhamoy_sarkar ***/
 /*** import your models here ***/
 /*** | =======================================IMPORTS==============================================================    |***/
 const mongoose = require('mongoose');
@@ -368,7 +370,8 @@ module.exports = (app,passport,io) => {
 			res.send(conversation.messages );
 		} );
 	});
-	app.post('/main/sendMessage',(req,res)=>{
+	app.post('/main/sendMessage',upload.fields([{name: 'image',maxCount:1},{name: 'video',maxCount: 1},
+			 {name: 'voice',maxCount: 1}]),(req,res)=>{
 		let conversation_id= (req.user._id<req.body.to)? 
 							 (req.user._id+"_"+req.body.to) : (req.body.to+"_"+req.user._id);
 		
@@ -376,6 +379,18 @@ module.exports = (app,passport,io) => {
 			conversation_id=req.user._id; // 
 
 		var msg=new Message({data: req.body.data,by: req.user._id,to: req.body.to });
+		if(req.files && req.files['image'] && req.files['image'][0]){
+			msg.data=req.files['image'][0].filename.toString();
+			msg.type='image';
+		}else if(req.files && req.files['video'] && req.files['video'][0]){
+			msg.data=req.files['video'][0].filename.toString();
+			msg.type='video';
+		
+		}else if(req.files && req.files['voice'] && req.files['voice'][0]){
+			msg.data=req.files['voice'][0].filename.toString();
+			msg.type='voice';
+		
+		}
 		msg.save();
 		Conversation.findById(conversation_id).then(
 			conversation=>{
@@ -422,15 +437,25 @@ module.exports = (app,passport,io) => {
 	});
 
 	app.get('/newsFeed',(req,res)=>{
-		User.findById(req.user._id).populate({
+		User.findById(req.user._id).populate(
+		[{
 			path: 'friends',
+			populate: {
+				path: 'posts'
+			},
 			select: 'posts'	
-		}).then(user=>res.send(user.friends)); // user.friends is now populated list of posts of all the friends...
+		},
+		{path: 'posts',populate: {path: 'comments'} }
+
+		]).select('posts').then(user=>res.send(user.friends)); // user.friends is now populated list of posts of all the friends...
+	});
+	app.get('/onlineUsers',(req,res)=>{
+		Online.find({}).populate({'path': 'id',select: 'name profilePic'}).then((user)=>res.send(user));
 	});
 	app.get('/searchUser',(req,res)=>{
 		let name=req.query.name;
-		User.find({$or:[{name: new RegExp(name, "i")},{email: new RegExp(name, "i")}]},null,{sort:'_id'})
-		.select('name').select('profilePic')
+		User.find({$or:[{name: new RegExp(name, "i")},{email: new RegExp(name, "i")},{phone:RegExp(name, "i")} ]},null,{sort:'_id'})
+		.select('name').select('profilePic').select('phone')
 		.then((users)=>{ 
 			res.send(users);
 		} );	

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const onlineSchema = new mongoose.Schema({
-  id: String,
+  id: { type: mongoose.Schema.Types.ObjectId, ref: 'user'},
   socket: String
 });
 

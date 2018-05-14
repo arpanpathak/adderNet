@@ -8,7 +8,7 @@ import { Col,Row,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,N
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
 import queryString from 'query-string';
 
-const url="http://172.21.241.15:5000/uploads/",
+const url="/uploads/",
 	  default_dp="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg9bcqOOnchsEiViN-H9qdrKISJtIAWKIqRK_HweHvJx6bjQfA";
 class Post extends Component {
 	constructor(props) {

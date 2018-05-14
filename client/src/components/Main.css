@@ -119,3 +119,8 @@ body {
 #sidenav-overlay {
     margin-left: 300px !important;
 }
+
+.collapsible-header{
+	background: #333 !important;
+	color: #fff !important;
+}
