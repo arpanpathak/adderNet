@@ -33,6 +33,9 @@ module.exports = (app,passport,io) => {
 
 	require('./sockets/socket-routes.js')(io);
 	const Online=require('./models/online-model');
+	Online.remove({},()=>{
+	  console.log("Cleared Online");
+	});
 	/// NOTE : -- socket.io added to this file.. you can emit any method to connected socket..
 	// an API to get all the details about the developers/creators ...
 	app.get('/creators', (req, res) => {
@@ -380,17 +383,18 @@ module.exports = (app,passport,io) => {
 				conversation.save().then( ()=>{ 
 					Online.find({id: req.body.to}).then((onlineData)=>{
 					          onlineData.forEach((onlinePerson)=>{
-					          	console.log('emiting to '+req.body.to);
+					          	
 					            io.to(onlinePerson.socket).emit('message-received',msg);
 					          });
 					 });
 					Online.find({id: req.user._id}).then((onlineData)=>{
 							 console.log('emiting to '+req.user._id);
 					          onlineData.forEach((onlinePerson)=>{
-					            io.to(onlinePerson.socket).emit('message-sent',msg);
+					            io.to(onlinePerson.socket).emit('sent',msg);
+					            
 					          });
 					 });
-					res.send({ sent: true}) 
+					res.send({ sent: true }) 
 				});
 
 			}
@@ -423,7 +427,14 @@ module.exports = (app,passport,io) => {
 			select: 'posts'	
 		}).then(user=>res.send(user.friends)); // user.friends is now populated list of posts of all the friends...
 	});
-		
+	app.get('/searchUser',(req,res)=>{
+		let name=req.query.name;
+		User.find({$or:[{name: new RegExp(name, "i")},{email: new RegExp(name, "i")}]},null,{sort:'_id'})
+		.select('name').select('profilePic')
+		.then((users)=>{ 
+			res.send(users);
+		} );	
+	})
 	/*** ......................... **/
 	// Test API
 	//importing the unit test file....
@@ -435,17 +446,18 @@ module.exports = (app,passport,io) => {
  *
  */
 
-app.get('/searchFriend',(req, res)=>{
-	name = typeof(req.query.name) == 'string' && req.query.name.trim().length > 0 ? req.query.name.trim() : false;
-	if(name){
-		helpers.searchFriend(name, (err, data)=>{
-			if(!err && data){
-				res.json(data);
-			}else{
-				res.send("No data found");
-			}
-		});
-	}else{
-		res.send("Error: Please enter valid search name");
-	}
-});
+// app.get('/searchFriend',(req, res)=>{
+// 	name = typeof(req.query.name) == 'string' && req.query.name.trim().length > 0 ? req.query.name.trim() : false;
+// 	if(name){
+// 		helpers.searchFriend(name, (err, data)=>{
+// 			if(!err && data){
+// 				res.json(data);
+// 			}else{
+// 				res.send("No data found");
+// 			}
+// 		});
+// 	}else{
+// 		res.send("Error: Please enter valid search name");
+// 	}
+// });
+

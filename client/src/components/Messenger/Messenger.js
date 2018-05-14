@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { Row,Col,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,NavItem
          , Collapsible,CollapsibleItem ,Tabs, Tab} from 'react-materialize';
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
-const url="http://172.21.241.15:5000/uploads/";
+const url="http://192.168.0.100:5000/uploads/";
 
 class Messenger extends Component {
   constructor(props) {
@@ -29,9 +29,8 @@ class Messenger extends Component {
       this.setState({messages: this.state.messages.concat(message)});
       this.scroll();
     });
-    this.props.socket.on('message-sent',(message)=>{
+    this.props.socket.on('sent',(message)=>{
       // if(this.props.user._id===message.by)
-
       this.setState({messages: this.state.messages.concat(message)});
       this.scroll();
     });
@@ -42,7 +41,9 @@ class Messenger extends Component {
     this.setState( { [e.target.id]: e.target.value } );
   }
   sendMessage = (e) => {
-    $.post('/main/sendMessage',{to: this.state.to,data: this.state.userMessage});
+    $.post('/main/sendMessage',{to: this.state.to,data: this.state.userMessage},(res)=> {
+      $('#msg-text-msg').attr('value','');
+     } );
   }
   sendImageMessage = (e) => {
     
@@ -103,10 +104,10 @@ class Messenger extends Component {
           {this.state.messages.map((message,id)=>
             <div className={message.to===this.props.user._id? 'card messenger-message-to':'card messenger-message-from'}>
               <span className='badge chip grey darken-4 white-text' style={{ fontSize: '9px',position: 'absolute', top: '0',right: '0'}}>
-                {new Date(message.date).toString()}|{message.to===this.props.user._id?  this.state.to_user_name : this.props.user.name }
+                {new Date(message.date).toString()}|{message.to===this.props.user._id?    this.state.to_user_name: this.props.user.name   }
               </span>
               <div className='card-panel' style={{ background: 'transparent',fontSize: '10px', padding: '10px 1px 1px 1px',
-              boxShadow: '0 0 0 0'}}>
+              boxShadow: '0 0 0 0',whiteSpace: 'pre-line'}}>
               {message.data}
               </div> 
             </div>) }
@@ -115,10 +116,12 @@ class Messenger extends Component {
           
         </div>
         <Row className='card-panel' >
-          <textarea placeholder='Write here...' className='messenger-message' id='userMessage' onChange={this.handleChange} />
-          <Button floating tooltip='upload image' icon='image' className='waves-effect waves-yellow red darken-4 spin' onClick={this.sendImageMessage}></Button>
+          <textarea placeholder='Write here...' id='msg-text-msg' className='messenger-message' id='userMessage' onChange={this.handleChange} 
+          onKeyDown={(e)=>{if(e.key === 'Enter' && e.ctrlKey) this.sendMessage()}}/>
+          <Button floating data-tooltip='upload image' icon='image' className='waves-effect waves-yellow red darken-4 spin' onClick={this.sendImageMessage}></Button>
           <Button floating icon='videocam' className='waves-effect waves-yellow blue-grey darken-4 spin' onClick={this.sendVideoMessage}></Button>
-          <Button floating icon='send' className='waves-effect waves-yellow blue darken-2 spin' onClick={this.sendMessage}></Button>
+          <Button floating icon='send' className='waves-effect waves-yellow blue darken-2 spin' onClick={this.sendMessage}
+          ></Button>
           <span> *ctrl+ enter to send </span>
         </Row> 
  			</div>

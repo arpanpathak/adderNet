@@ -8,13 +8,14 @@ import { Row,Col,Input,Icon,Button,Collection, Navbar,CollectionItem, Dropdown,N
 import {Redirect,Link,Route,Switch} from 'react-router-dom';
 import Nav from './../ProfileNavbar/Navbar';
 import ReactLoading from 'react-loading';
-import SocketIOClient from "socket.io-client";
+import openSocket from "socket.io-client";
 
 /*** import your components here ***/
 import Messenger from './../Messenger/Messenger';
 import Error404 from './../404/404';
 import MyPosts from './../MyPosts/MyPosts';
 import Timeline from './../Timeline/Timeline';
+import Search from './../Search/Search';
 
 const Loading = ({ type, color }) => (
     <div style={{paddingTop: 'calc(50vh - 100px)', marginLeft: 'calc(50% - 100px)'}}>
@@ -23,6 +24,7 @@ const Loading = ({ type, color }) => (
 );
 
 
+const url = "http://172.21.241.15:5000/uploads";
 
 /*** end of this import ***/
 class Profile extends Component {
@@ -33,12 +35,11 @@ class Profile extends Component {
       user: null,
       loading: true,
     };
-    this.socket=SocketIOClient('http://172.21.241.15:5000');
+    this.socket=openSocket('http://172.21.241.15:5000');
   }
 
   componentDidMount() {
 
-    $.ajaxSetup({ cache: false });
     var socket=null;
     $.get( '/authenticated',(res)=>{ 
             this.setState( { authenticated: res.authenticated,user: res.user,loading:false,
@@ -69,11 +70,11 @@ class Profile extends Component {
                <Route path="/profile/feed" render={()=>(<div className='white z-depth-2' style={{ height: '100%'}}> 
 
                 </div>)} />
-               <Route exact path="/profile/messenger" component={()=><Messenger socket={this.socket} user={this.state.user} />}  />
-               <Route exact path="/profile/myposts" component={()=><MyPosts user={this.state.user} />} />
+               <Route exact path="/profile/messenger" component={()=><Messenger socket={this.socket} user={this.state.user} url={url}/>}  />
+               <Route exact path="/profile/myposts" component={()=><MyPosts user={this.state.user} url={url}/>} />
                <Route exact path="/profile/timeline/:id?" component={()=><Timeline user={this.state.user}
-                socket={this.socket } /> } />
-               <Route path="/profile/search" component={()=><div> search</div>} />
+                socket={this.socket } url={url} /> } />
+               <Route exact path="/profile/search" component={()=><Search user={this.state.user} url={url} />} />
                <Route component={Error404} />
               </Switch>
            </div>

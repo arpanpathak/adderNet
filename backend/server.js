@@ -27,17 +27,18 @@ const mongooseStore=new MongoStore({mongooseConnection : mongoose.connection});
       secret: 'this is secret',
       name: 'user-session-cookie',
       key: 'user-session-cookie',
-      cookie: { expires: new Date(253402300000000) },
+      cookie: { name: 'user-session-cookie',expires: new Date(253402300000000) },
       store: mongooseStore,
       // proxy: true,
-       resave: true,
+      resave: true,
       // secure: false,
        saveUninitialized: true
   });
   app.use(sessionMiddleware);
-
-  app.use(passport.initialize());
-  app.use(passport.session());
+  var passInit = passport.initialize();
+  var passSess = passport.session();
+  app.use(passInit);
+  app.use(passSess);
 
 // allowing ajax request...
 app.use(cors({origin: '*'}));
@@ -112,9 +113,25 @@ io = socket(server);
 // }
 
 // }));
+
+// io.set('transports', ['websocket']);
 io.use(function(socket, next) {
+    socket.request.originalUrl = socket.request.url;
     sessionMiddleware(socket.request, socket.request.res, next);
 });
+io.use(function(socket, next){
+  // console.log(socket.request.session);
+  // cookieParser(socket.request, socket.request.res, next);
+  next();
+
+});
+
+// io.use(function(socket, next){
+//   passInit(socket.request, socket.request.res, next);
+// });
+// io.use(function(socket, next){
+//   passSess(socket.request, socket.request.res, next);
+// });
 
 // importing API routes....
 require('./api')(app,passport,io);

@@ -50,7 +50,7 @@ class Post extends Component {
 		}
 		$.post('/main/addLike',{_id: this.state._id},(res)=>{
 			alert(res.added);
-			this.setState({likes: this.state.likes+1});
+			this.setState({likes: this.state.likes+1, liked: true});
 		});
 	}
 	addDislike =(e)=>{
@@ -59,8 +59,12 @@ class Post extends Component {
 			return ;
 		}
 		$.post('/main/addDislike',{_id: this.state._id},(res)=>{
+			if(this.state.disliked) {
+				alert('already disliked');
+				return ;
+			}
 			alert(res.added);
-			this.setState({likes: this.state.dislikes+1});
+			this.setState({likes: this.state.dislikes+1, disliked: true});
 		});
 	}
 

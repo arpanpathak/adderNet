@@ -85,7 +85,7 @@ class Nav extends Component {
           <CreatePost /> 
          </NavItem>
          <NavItem href='/profile/myposts'><div>my posts<Icon left>list</Icon></div></NavItem>
-         <NavItem href='javascript:void(0)' ><div>search<Icon left>search</Icon></div></NavItem> 
+         <NavItem href='/profile/search'><div>search<Icon left>search</Icon></div></NavItem> 
          <SideNav
            trigger={<span><Icon left>more</Icon></span> }
            options={{ closeOnClick: true }}

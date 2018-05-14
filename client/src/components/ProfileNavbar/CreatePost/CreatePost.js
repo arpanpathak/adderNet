@@ -30,7 +30,9 @@ class CreatePost extends Component {
     // $.post('/main/createPost', this.state,(res)=>{
     //   alert(res._id);
     // });
-    
+    if(this.state.postContent.trim()==""){
+      alert('Please enter post content.Uploading video/image without pot content is not allowed');
+    }
     var data=new FormData;
   
     data.append('image',this.state.image);

@@ -37,7 +37,7 @@ class Main extends Component {
     return (
     <div style={{ overflow: 'hidden'}}>
 		    <Route path='/music' component={() => window.location = 
-          `http://127.0.0.1:8000/music/?userid=${this.state.user._id},email=${this.state.user.email}`
+          `http://10.11.48.51:8000/music/userid=${this.state.user._id},email=${this.state.user.email}`
         }
         />
         <Route path="/profile" component={Profile} />
